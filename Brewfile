@@ -1,0 +1,13 @@
+#brew "fzf"
+brew "gh"
+brew "jq"
+brew "neovim"
+#brew "ripgrep"
+brew "tmux"
+brew "tree"
+
+cask "iterm2"
+cask "monitorcontrol"
+cask "raycast"
+cask "spotify"
+cask "visual-studio-code"

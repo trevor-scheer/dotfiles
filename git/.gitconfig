@@ -1,0 +1,13 @@
+[user]
+  name = Trevor Scheer
+  email = trevor.scheer@gmail.com
+
+[core]
+  editor = nvim
+  excludesfile = ~/.gitignore
+
+[alias]
+  #co = checkout
+  #br = branch
+  #ci = commit
+  s = status
