@@ -6,6 +6,7 @@ brew "neovim"
 brew "tmux"
 brew "tree"
 
+cask "google-chrome"
 cask "iterm2"
 cask "monitorcontrol"
 cask "raycast"
