@@ -6,4 +6,5 @@ alias gp="git push"
 alias vim="nvim"
 
 alias zshrc="code ~/.zshrc"
+alias dotfiles="code ~/.dotfiles"
 alias brewfile="code ~/.dotfiles/Brewfile"
