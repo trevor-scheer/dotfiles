@@ -21,6 +21,19 @@ fi
 ln -sf "$HOME/.dotfiles/zsh/.zshrc" "$HOME/.zshrc"
 ln -sf "$HOME/.dotfiles/git/.gitconfig" "$HOME/.gitconfig"
 
+# Copy ssh keys
+if [ ! -d "$HOME/.ssh" ]; then
+  echo "💡 No .ssh directory found, creating .ssh directory..."
+  mkdir -p "$HOME/.ssh"
+fi
+if [ ! -f "$HOME/.ssh/id_ed25519" ]; then
+  echo "💡 No SSH key found (id_ed25519), copying SSH key..."
+  cp "$HOME/.dotfiles/ssh/id_ed25519" "$HOME/.ssh/id_ed25519"
+  cp "$HOME/.dotfiles/ssh/id_ed25519.pub" "$HOME/.ssh/id_ed25519.pub"
+  chmod 600 "$HOME/.ssh/id_ed25519"
+  chmod 644 "$HOME/.ssh/id_ed25519.pub"
+fi
+
 if [ -d "$HOME/.oh-my-zsh" ]; then
   echo "✅ Oh My Zsh is already installed."
 else
