@@ -1,25 +1,33 @@
 #!/bin/bash
 
+DOTFILES_DIR=$(pwd)
 set -e
 
 echo "Setting up your Mac..."
 
 # Install Xcode command line tools
-xcode-select --install || true
+if xcode-select -p &> /dev/null; then
+    echo "✅ Xcode Command Line Tools are already installed."
+else
+    echo "💡 Installing Xcode Command Line Tools..."
+    xcode-select --install || true
+fi
 
 # Install Homebrew if not installed
 if ! command -v brew &> /dev/null; then
+  echo "💡 Installing brew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-  echo "testing!"
   echo >> $HOME/.zprofile
   echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
   eval "$(/opt/homebrew/bin/brew shellenv)"
+else 
+  echo "✅ Brew is already installed."
 fi
 
 # Create symlinks
-ln -sf "$HOME/.dotfiles/zsh/.zshrc" "$HOME/.zshrc"
-ln -sf "$HOME/.dotfiles/git/.gitconfig" "$HOME/.gitconfig"
+ln -sf "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
+ln -sf "$DOTFILES_DIR/git/.gitconfig" "$HOME/.gitconfig"
 
 # Copy ssh keys
 if [ ! -d "$HOME/.ssh" ]; then
@@ -28,8 +36,8 @@ if [ ! -d "$HOME/.ssh" ]; then
 fi
 if [ ! -f "$HOME/.ssh/id_ed25519" ]; then
   echo "💡 No SSH key found (id_ed25519), copying SSH key..."
-  cp "$HOME/.dotfiles/ssh/id_ed25519" "$HOME/.ssh/id_ed25519"
-  cp "$HOME/.dotfiles/ssh/id_ed25519.pub" "$HOME/.ssh/id_ed25519.pub"
+  cp "$DOTFILES_DIR/ssh/id_ed25519" "$HOME/.ssh/id_ed25519"
+  cp "$DOTFILES_DIR/ssh/id_ed25519.pub" "$HOME/.ssh/id_ed25519.pub"
   chmod 600 "$HOME/.ssh/id_ed25519"
   chmod 644 "$HOME/.ssh/id_ed25519.pub"
 fi
@@ -47,11 +55,18 @@ fi
 
 # Install rustup (and rustc)
 if ! command -v rustup &> /dev/null; then
+  echo "💡 Installing Rust toolchain..."
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+else
+  echo "✅ Rust toolchain is already installed."
 fi
 
-
 # Install apps from Brewfile
-brew bundle --file="$HOME/.dotfiles/Brewfile"
+brew bundle --file="$DOTFILES_DIR/Brewfile"
 
 echo "✅ Done! Reload your terminal."
+
+# Mac settings
+defaults write -g com.apple.swipescrolldirection -bool false
+defaults write com.apple.menuextra.battery ShowPercent YES
+echo "🔄 You will need to log out for preference updates to take effect."
