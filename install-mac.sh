@@ -13,6 +13,24 @@ else
     xcode-select --install || true
 fi
 
+# Install Volta if not installed
+if ! command -v volta &> /dev/null; then
+  echo "💡 Installing Volta..."
+  curl https://get.volta.sh | bash
+  echo 'export VOLTA_HOME="$HOME/.volta"' >> $HOME/.zprofile
+  echo 'export PATH="$VOLTA_HOME/bin:$PATH"' >> $HOME/.zprofile
+else 
+  echo "✅ Volta is already installed."
+fi
+
+# Install Node if not installed
+if ! command -v node &> /dev/null; then
+  echo "💡 Installing Node.js..."
+  volta install node
+else 
+  echo "✅ Node.js is already installed."
+fi
+
 # Install Homebrew if not installed
 if ! command -v brew &> /dev/null; then
   echo "💡 Installing brew..."
@@ -26,8 +44,8 @@ else
 fi
 
 # Create symlinks
-ln -sf "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
-ln -sf "$DOTFILES_DIR/git/.gitconfig" "$HOME/.gitconfig"
+ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
+ln -sf "$DOTFILES_DIR/.gitconfig" "$HOME/.gitconfig"
 
 # Copy ssh keys
 if [ ! -d "$HOME/.ssh" ]; then
