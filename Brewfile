@@ -5,7 +5,8 @@ brew "neovim"
 #brew "ripgrep"
 brew "tmux"
 brew "tree"
-brew "volta"
+# Brew volta doesn't work well...it's installed in the install.sh script instead
+# brew "volta"
 
 cask "discord"
 cask "google-chrome"
