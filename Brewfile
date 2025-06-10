@@ -2,6 +2,7 @@
 brew "gh"
 brew "jq"
 brew "neovim"
+brew "python@3.11"
 #brew "ripgrep"
 brew "tmux"
 brew "tree"
