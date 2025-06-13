@@ -4,6 +4,7 @@ alias gb="git branch"
 alias gc="git commit"
 alias gp="git push"
 alias gs="git status"
+alias grc="git rebase --continue"
 alias vim="nvim"
 
 alias zshrc="code ~/.zshrc"
