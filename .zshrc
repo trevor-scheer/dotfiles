@@ -1,11 +1,12 @@
 # Developer goodies
-export EDITOR="nvim"
+export EDITOR="vim"
 alias gb="git branch"
 alias gc="git commit"
 alias gp="git push"
 alias gs="git status"
 alias grc="git rebase --continue"
-alias vim="nvim"
+alias gprom="git pull --rebase origin main"
+# alias vim="nvim"
 
 alias zshrc="code ~/.zshrc"
 alias dotfiles="code ~/dotfiles"
