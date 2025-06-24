@@ -14,3 +14,9 @@
 
 [pull]
 	rebase = true
+
+[branch]
+	autoSetupMerge = simple
+
+[push]
+  autoSetupRemote = true
