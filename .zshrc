@@ -8,6 +8,24 @@ alias grc="git rebase --continue"
 alias gprom="git pull --rebase origin main"
 # alias vim="nvim"
 
+fixup() {
+  # Check for unstaged changes
+  if ! git diff --quiet; then
+    echo "Creating fixup commit for unstaged changes..."
+
+    # Stage only unstaged changes (exclude untracked files)
+    git diff --name-only | xargs git add
+
+    # Create fixup commit targeting previous commit
+    git commit --fixup=HEAD
+
+    # Perform autosquash rebase to squash into previous commit
+    git rebase --autosquash -i HEAD~2
+  else
+    echo "No unstaged changes found."
+  fi
+}
+
 alias zshrc="code ~/.zshrc"
 alias dotfiles="code ~/dotfiles"
 alias brewfile="code ~/.dotfiles/Brewfile"
