@@ -41,3 +41,8 @@ function codespace-cursor() {
   node ~/obsidian/scripts/setupCodespaceSSH.cjs
   popd
 }
+
+function turboclient() {
+  turbo -F @vanta/web-client "$@"
+}
+alias tc=turboclient
