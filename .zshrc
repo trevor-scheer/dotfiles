@@ -1,4 +1,4 @@
-# Developer goodies
+# Git
 export EDITOR="vim"
 alias gb="git branch"
 alias gc="git commit"
@@ -23,6 +23,15 @@ fixup() {
     git rebase --autosquash -i HEAD~2
   else
     echo "No unstaged changes found."
+  fi
+}
+
+# Docker
+dcl() {
+  if [ -n "$1" ]; then
+    docker compose logs -f "$1"
+  else
+    docker compose logs -f
   fi
 }
 
