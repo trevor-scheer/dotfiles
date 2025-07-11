@@ -40,7 +40,8 @@ alias dotfiles="code ~/dotfiles"
 alias brewfile="code ~/.dotfiles/Brewfile"
 
 # Vanta
-alias mdsw="make dev-start-web"
+alias jdsw="just dev-start-web"
+alias mdsw="jdsw"
 alias cs="gh cs create -R VantaInc/obsidian && gh cs code"
 
 function codespace-cursor() {
