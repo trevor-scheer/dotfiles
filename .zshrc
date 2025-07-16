@@ -34,6 +34,7 @@ dcl() {
     docker compose logs -f
   fi
 }
+alias ld="lazydocker"
 
 alias zshrc="code ~/.zshrc"
 alias dotfiles="code ~/dotfiles"
