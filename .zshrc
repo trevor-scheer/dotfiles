@@ -36,9 +36,13 @@ dcl() {
 }
 alias ld="lazydocker"
 
-alias zshrc="code ~/.zshrc"
 alias dotfiles="code ~/dotfiles"
 alias brewfile="code ~/.dotfiles/Brewfile"
+function zshrc() {
+  code -w ~/.zshrc
+  source ~/.zshrc
+  echo ".zshrc reloaded successfully."
+}
 
 # Vanta
 alias jdsw="just dev-start-web"
@@ -49,7 +53,7 @@ function codespace-cursor() {
   pushd ~/obsidian
   git checkout main
   git pull
-  node ~/obsidian/scripts/setupCodespaceSSH.cjs
+  node ~/obsidian/scripts/setupCodespaceSSH.js
   popd
 }
 
