@@ -1,3 +1,6 @@
+# Not sure this should be needed but it's not working without.
+source ~/.profile
+
 # Zsh-specific configurations
 function zshrc() {
   code -w ~/.zshrc
