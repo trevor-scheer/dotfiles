@@ -56,7 +56,7 @@ alias brewfile="code ~/.dotfiles/Brewfile"
 # Vanta
 alias jdsw="just dev-start-web"
 alias mdsw="jdsw"
-alias cs="gh cs create -R VantaInc/obsidian && sleep 5 && codespace-cursor"
+alias cs="gh cs create -R VantaInc/obsidian && sleep 10 && codespace-cursor"
 
 codespace-cursor() {
   pushd ~/obsidian
