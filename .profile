@@ -57,20 +57,27 @@ alias brewfile="code ~/.dotfiles/Brewfile"
 alias jdsw="just dev-start-web"
 alias mdsw="jdsw"
 
-cs() {
-  cs_id=$(gh cs create -R VantaInc/obsidian)
-  echo "Codespace created, waiting for it to be ready...(~40s arbitrarily)"
-  sleep 40
-  echo "Codespace ready, setting up SSH..."
-  
-  # Fetch and run the script from private repo using gh
+csssh() {
   temp="___setupCodespaceSSH.temp.js"
   gh api repos/VantaInc/obsidian/contents/scripts/setupCodespaceSSH.js \
     --jq '.content' | base64 -d > "$temp"
   node "$temp"
   rm "$temp"
+}
+
+newcs() {
+  cs_id=$(gh cs create -R VantaInc/obsidian)
+  echo "Codespace created, waiting for it to be ready...(~40s arbitrarily)"
+  sleep 40
+  echo "Codespace ready, setting up SSH..."
+  
+  csssh
   
   cursor -n --folder-uri "vscode-remote://ssh-remote+${cs_id}.github.dev/workspaces/obsidian"
+}
+
+opencs() {
+  echo "TODO"
 }
 
 turboclient() {
