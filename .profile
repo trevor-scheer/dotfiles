@@ -1,5 +1,6 @@
 # ~/.profile - User-specific environment and startup programs
-export SHELL=/bin/zsh
+# TODO: ensure zsh is installed
+# export SHELL=/bin/zsh
 
 # Cargo (Rust) environment
 #. "$HOME/.cargo/env"
