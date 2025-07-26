@@ -1,6 +1,8 @@
 #brew "fzf"
 brew "gh"
 brew "jq"
+brew "lazydocker"
+brew "lazygit"
 brew "neovim"
 brew "python@3.11"
 #brew "ripgrep"
