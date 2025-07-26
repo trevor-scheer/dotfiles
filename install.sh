@@ -44,6 +44,8 @@ else
 fi
 
 # Install apps from Brewfile
+brew update
+brew upgrade
 brew tap homebrew/bundle
 brew bundle --file="$DOTFILES_DIR/Brewfile"
 
