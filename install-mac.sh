@@ -1,8 +1,5 @@
 #!/bin/bash
 
-DOTFILES_DIR=$(pwd)
-set -e
-
 echo "Setting up your Mac..."
 
 # Install Xcode command line tools
@@ -13,45 +10,12 @@ else
     xcode-select --install || true
 fi
 
-# Install Volta if not installed
-if ! command -v volta &> /dev/null; then
-  echo "💡 Installing Volta..."
-  curl https://get.volta.sh | bash
-  echo 'export VOLTA_HOME="$HOME/.volta"' >> $HOME/.zprofile
-  echo 'export PATH="$VOLTA_HOME/bin:$PATH"' >> $HOME/.zprofile
-else 
-  echo "✅ Volta is already installed."
-fi
-
-# Install Node if not installed
-if ! command -v node &> /dev/null; then
-  echo "💡 Installing Node.js..."
-  volta install node
-else 
-  echo "✅ Node.js is already installed."
-fi
-
-# Install Homebrew if not installed
-if ! command -v brew &> /dev/null; then
-  echo "💡 Installing brew..."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-  echo >> $HOME/.zprofile
-  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-else 
-  echo "✅ Brew is already installed."
-fi
-
-# Create symlinks
-ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
-ln -sf "$DOTFILES_DIR/.gitconfig" "$HOME/.gitconfig"
-
 # Copy ssh keys
 if [ ! -d "$HOME/.ssh" ]; then
   echo "💡 No .ssh directory found, creating .ssh directory..."
   mkdir -p "$HOME/.ssh"
 fi
+
 if [ ! -f "$HOME/.ssh/id_ed25519" ]; then
   echo "💡 No SSH key found (id_ed25519), copying SSH key..."
   cp "$DOTFILES_DIR/ssh/id_ed25519" "$HOME/.ssh/id_ed25519"
@@ -78,9 +42,6 @@ if ! command -v rustup &> /dev/null; then
 else
   echo "✅ Rust toolchain is already installed."
 fi
-
-# Install apps from Brewfile
-brew bundle --file="$DOTFILES_DIR/Brewfile"
 
 echo "✅ Done! Reload your terminal."
 
