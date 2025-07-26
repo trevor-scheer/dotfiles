@@ -80,6 +80,14 @@ opencs() {
   echo "TODO"
 }
 
+stopcs() {
+  temp="___shutdownCodespaces.temp.js"
+  gh api repos/VantaInc/obsidian/contents/scripts/shutdownCodespaces.cjs \
+    --jq '.content' | base64 -d > "$temp"
+  node "$temp"
+  rm "$temp"
+}
+
 turboclient() {
   turbo -F @vanta/web-client "$@"
 }
