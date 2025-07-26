@@ -8,6 +8,10 @@ ln -sf "$DOTFILES_DIR/.gitconfig" "$HOME/.gitconfig"
 ln -sf "$DOTFILES_DIR/.profile" "$HOME/.profile"
 ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
 
+if ! command -v zsh &> /dev/null; then
+  echo "💡 Installing Zsh..."
+  sudo apt install zsh
+fi
 
 # Install Volta if not installed
 if ! command -v volta &> /dev/null; then
