@@ -17,3 +17,4 @@ source $UTILITIES_DIR/vanta.sh
 export PATH="$HOME/bin:$PATH"
 
 echo "✅ zshrc loaded."
+
