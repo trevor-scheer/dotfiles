@@ -5,10 +5,10 @@ export SHELL=/bin/zsh
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
-function profile() {
-  code -w ~/.profile
-  source ~/.profile
-  echo ".profile reloaded successfully."
+function zprofile() {
+  code -w ~/.zprofile
+  source ~/.zprofile
+  echo ".zprofile reloaded successfully."
 }
 
 # Git
