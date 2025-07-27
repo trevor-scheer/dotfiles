@@ -13,6 +13,9 @@ source $UTILITIES_DIR/npm.sh
 source $UTILITIES_DIR/codespaces.sh
 source $UTILITIES_DIR/vanta.sh
 
+# Add Homebrew to PATH if installed
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
 # Add custom scripts to PATH
 export PATH="$HOME/bin:$PATH"
 
