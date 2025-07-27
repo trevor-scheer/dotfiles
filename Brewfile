@@ -1,4 +1,5 @@
 #brew "fzf"
+brew "block-goose-cli"
 brew "gh"
 brew "jq"
 brew "lazydocker"
