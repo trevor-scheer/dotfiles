@@ -1,66 +1,33 @@
 #!/bin/bash
 
-DOTFILES_DIR=$(pwd)
 set -e
 
-# Create symlinks
-ln -sf "$DOTFILES_DIR/.gitconfig" "$HOME/.gitconfig"
-ln -sf "$DOTFILES_DIR/.profile" "$HOME/.profile"
-ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
+echo "Setting up cross-platform dependencies"
+source ./scripts/setup-common.sh
 
-if ! command -v zsh &> /dev/null; then
-  echo "💡 Installing Zsh..."
-  sudo apt install zsh
+# Check if the script is being run in GitHub Codespaces
+if [ "$CODESPACE_NAME" ]; then
+    echo "Running in GitHub Codespaces..."
+    source ./scripts/setup-codespaces.sh
+    exit 0
 fi
 
-# Install Volta if not installed
-if ! command -v volta &> /dev/null; then
-  echo "💡 Installing Volta..."
-  curl https://get.volta.sh | bash
-  echo 'export VOLTA_HOME="$HOME/.volta"' >> $HOME/.zprofile
-  echo 'export PATH="$VOLTA_HOME/bin:$PATH"' >> $HOME/.zprofile
-  
-  # Source the new environment to make volta available immediately
-  export VOLTA_HOME="$HOME/.volta"
-  export PATH="$VOLTA_HOME/bin:$PATH"
-else 
-  echo "✅ Volta is already installed."
-fi
+# Determine the operating system
+OS="$(uname -s)"
 
-# Install Node if not installed
-if ! command -v node &> /dev/null; then
-  echo "💡 Installing Node.js..."
-  volta install node
-else 
-  echo "✅ Node.js is already installed."
-fi
+case "$OS" in
+    Darwin)
+        echo "Detected macOS..."
+        source ./scripts/setup-macos.sh
+        ;;
+    Linux)
+        echo "Detected Linux..."
+        source ./scripts/setup-linux.sh
+        ;;
+    *)
+        echo "Unsupported operating system: $OS"
+        exit 1
+        ;;
+esac
 
-# Install Homebrew if not installed
-if ! command -v brew &> /dev/null; then
-  echo "💡 Installing brew..."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-  echo >> $HOME/.zprofile
-  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-else 
-  echo "✅ Brew is already installed."
-fi
-
-# Install apps from Brewfile
-brew update
-brew upgrade
-brew bundle --file="$DOTFILES_DIR/Brewfile"
-
-if [ -n "$CODESPACES" ]; then
-  echo "This script is running inside a GitHub Codespace."
-  sudo chsh "$(id -un)" --shell "/usr/bin/zsh"
-else  
-  # Check if running on macOS
-  if [[ "$OSTYPE" == "darwin"* ]]; then
-    echo "Detected macOS. Running install-mac.sh..."
-    ./install-mac.sh
-  else
-    echo "Not running on macOS. Skipping install-mac.sh"
-  fi
-fi
+echo "Dotfiles setup completed successfully."
