@@ -7,7 +7,7 @@ if ! command -v brew &> /dev/null; then
   # Add Homebrew to PATH for Linux/Codespaces
   if [[ "$OSTYPE" == "linux-gnu"* ]] || [ -n "$CODESPACE_NAME" ]; then
     # echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bashrc
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zshrc
+    # echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zshrc
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   fi
 
