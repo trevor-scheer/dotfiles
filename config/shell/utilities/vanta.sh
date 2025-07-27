@@ -7,6 +7,9 @@ alias logs="make dev-watch-logs"
 alias yww="yarn workspace @vanta/web-client"
 
 alias tc=turboclient
+
 turboclient() {
   turbo -F @vanta/web-client "$@"
 }
+
+echo "✅ Vanta utilities loaded."

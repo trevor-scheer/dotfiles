@@ -10,12 +10,13 @@ create_symlink() {
     local source="$1"
     local target="$2"
 
-    if [ -e "$target" ]; then
-        echo "❌ $target already exists. Skipping."
-    else
-        ln -s "$source" "$target"
-        echo "✅ Created symlink from $source to $target"
-    fi
+    ln -sf "$source" "$target"
+    # if [ -e "$target" ]; then
+    #     echo "❌ $target already exists. Skipping."
+    # else
+    #     ln -s "$source" "$target"
+    #     echo "✅ Created symlink from $source to $target"
+    # fi
 }
 
 echo "⏳ Setting up symlinks for configuration files..."
@@ -24,6 +25,8 @@ create_symlink "$DOTFILES_DIR/config/git/.gitconfig" "$HOME/.gitconfig"
 create_symlink "$DOTFILES_DIR/config/shell/.zshrc" "$HOME/.zshrc"
 create_symlink "$DOTFILES_DIR/config/shell/.zprofile" "$HOME/.zprofile"
 
+source "$HOME/.zshrc"
+source "$HOME/.zprofile"
 
 # Main setup function
 echo "⏳ Setting up shell and common cross-platform dependencies..."

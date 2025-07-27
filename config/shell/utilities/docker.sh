@@ -8,3 +8,5 @@ dcl() {
     docker compose logs -f
   fi
 }
+
+echo "✅ Docker utilities loaded."

@@ -30,3 +30,5 @@ stopcs() {
   node "$temp"
   rm "$temp"
 }
+
+echo "✅ Codespaces utilities loaded."
