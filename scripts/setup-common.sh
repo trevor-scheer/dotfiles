@@ -18,12 +18,12 @@ create_symlink() {
     fi
 }
 
-
+$DOTFILES_DIR=$(pwd)
 # Symlink configuration files
-create_symlink "$HOME/dotfiles/config/git/.gitconfig" "$HOME/.gitconfig"
-#create_symlink "$HOME/dotfiles/config/shell/.bashrc" "$HOME/.bashrc"
-create_symlink "$HOME/dotfiles/config/shell/.zshrc" "$HOME/.zshrc"
-create_symlink "$HOME/dotfiles/config/shell/.zprofile" "$HOME/.zprofile"
+create_symlink "$DOTFILES_DIR/config/git/.gitconfig" "$HOME/.gitconfig"
+#create_symlink "$DOTFILES_DIR/config/shell/.bashrc" "$HOME/.bashrc"
+create_symlink "$DOTFILES_DIR/config/shell/.zshrc" "$HOME/.zshrc"
+create_symlink "$DOTFILES_DIR/config/shell/.zprofile" "$HOME/.zprofile"
 
 
 # Main setup function
@@ -38,6 +38,10 @@ echo "Note: You may need to restart your terminal for the shell change to take e
 fi
 
 souce ./scripts/install/volta-and-node.sh
+
 source ./scripts/install/brew.sh
+brew update
+brew upgrade
+brew bundle --file="$DOTFILES_DIR/Brewfile"
 
 echo "Common setup completed successfully."
