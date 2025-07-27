@@ -20,3 +20,5 @@ fixup() {
     echo "No unstaged changes found."
   fi
 }
+
+echo "✅ Git utilities loaded."

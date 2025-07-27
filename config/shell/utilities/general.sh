@@ -9,3 +9,5 @@ function zshrc() {
   source ~/.zshrc
   echo ".zshrc reloaded successfully."
 }
+
+echo "✅ General utilities loaded."
