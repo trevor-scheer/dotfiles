@@ -1,6 +1,6 @@
 # Install Volta if not installed
 if ! command -v volta &> /dev/null; then
-  echo "💡 Installing Volta..."
+  echo "⏳ Installing Volta..."
   curl https://get.volta.sh | bash
   echo 'export VOLTA_HOME="$HOME/.volta"' >> $HOME/.zprofile
   echo 'export PATH="$VOLTA_HOME/bin:$PATH"' >> $HOME/.zprofile
@@ -14,7 +14,7 @@ fi
 
 # Install Node if not installed
 if ! command -v node &> /dev/null; then
-  echo "💡 Installing Node.js..."
+  echo "⏳ Installing Node.js..."
   volta install node
 else 
   echo "✅ Node.js is already installed."

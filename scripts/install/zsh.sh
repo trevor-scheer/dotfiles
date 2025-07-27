@@ -1,6 +1,6 @@
 # Only setup zsh on Linux/Codespaces (macOS already uses zsh by default)
 if [[ "$OSTYPE" == "linux-gnu"* ]] || [ -n "$CODESPACE_NAME" ]; then
-  echo "Setting up zsh for Linux/Codespaces..."
+  echo "⏳ Setting up zsh..."
   
   # Install zsh using system package manager
   if command -v apt-get &> /dev/null; then
@@ -10,11 +10,11 @@ if [[ "$OSTYPE" == "linux-gnu"* ]] || [ -n "$CODESPACE_NAME" ]; then
   elif command -v dnf &> /dev/null; then
     sudo dnf install -y zsh
   else
-    echo "Warning: Could not install zsh automatically. Please install it manually."
+    echo "⚠️ Warning: Could not install zsh automatically. Please install it manually."
     return
   fi
-  
-  echo "zsh setup completed."
+
+  echo "✅ zsh setup completed."
 else
-  echo "macOS already uses zsh by default. Skipping zsh setup."
+  echo "✅ macOS already uses zsh by default. Skipping zsh setup."
 fi

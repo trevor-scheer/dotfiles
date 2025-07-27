@@ -11,15 +11,14 @@ create_symlink() {
     local target="$2"
 
     if [ -e "$target" ]; then
-        echo "$target already exists. Skipping."
+        echo "❌ $target already exists. Skipping."
     else
         ln -s "$source" "$target"
-        echo "Created symlink from $source to $target"
+        echo "✅ Created symlink from $source to $target"
     fi
 }
 
-$DOTFILES_DIR=$(pwd)
-# Symlink configuration files
+echo "⏳ Setting up symlinks for configuration files..."
 create_symlink "$DOTFILES_DIR/config/git/.gitconfig" "$HOME/.gitconfig"
 #create_symlink "$DOTFILES_DIR/config/shell/.bashrc" "$HOME/.bashrc"
 create_symlink "$DOTFILES_DIR/config/shell/.zshrc" "$HOME/.zshrc"
@@ -27,21 +26,23 @@ create_symlink "$DOTFILES_DIR/config/shell/.zprofile" "$HOME/.zprofile"
 
 
 # Main setup function
-echo "Setting up shell and common cross-platform dependencies..."
+echo "⏳ Setting up shell and common cross-platform dependencies..."
 
-source ./scripts/install/zsh.sh
+source $DOTFILES_DIR/scripts/install/zsh.sh
   # Change default shell to zsh if not already set
 if [[ "$SHELL" != *"zsh"* ]]; then
-echo "Changing default shell to zsh..."
-chsh -s $(which zsh)
-echo "Note: You may need to restart your terminal for the shell change to take effect."
+    echo "⏳ Changing default shell to zsh..."
+    chsh -s $(which zsh)
+    echo "⚠️ You may need to restart your terminal for the shell change to take effect."
 fi
 
-souce ./scripts/install/volta-and-node.sh
+source $DOTFILES_DIR/scripts/install/volta-and-node.sh
 
-source ./scripts/install/brew.sh
+source $DOTFILES_DIR/scripts/install/brew.sh
+echo "⏳ Installing Homebrew packages..."
 brew update
 brew upgrade
 brew bundle --file="$DOTFILES_DIR/Brewfile"
+echo "✅ Homebrew packages installed successfully."
 
-echo "Common setup completed successfully."
+echo "✅ Common setup completed successfully."
