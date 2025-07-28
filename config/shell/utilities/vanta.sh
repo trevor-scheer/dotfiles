@@ -11,9 +11,15 @@ csssh() {
 
 newcs() {
   cs_id=$(gh cs create -R VantaInc/obsidian)
-  echo "Codespace created, waiting for it to be ready...(~40s arbitrarily)"
-  sleep 40
-  echo "Codespace ready, setting up SSH..."
+  
+  echo -n "Codespace $cs_id created, waiting for it to be ready..."
+  status=""
+  while [ "$status" != "Available" ]; do
+    sleep 1
+    status=$(gh cs list | grep $cs_id | sed 's/.*obsidian//' | awk '{print $2}')
+    echo -n "."
+  done
+  echo " Codespace ready, setting up SSH"
   
   csssh
   

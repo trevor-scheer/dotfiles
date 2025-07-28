@@ -5,7 +5,7 @@ set -e
 DOTFILES_DIR="$HOME/dotfiles"
 
 echo "⏳ Setting up cross-platform dependencies..."
-source "$DOTFILES_DIR/scripts/setup-common.sh"
+source $DOTFILES_DIR/scripts/setup-common.sh
 
 # Check if the script is being run in GitHub Codespaces
 if [ "$CODESPACE_NAME" ]; then
