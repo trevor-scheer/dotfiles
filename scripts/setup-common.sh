@@ -10,6 +10,7 @@ create_symlink() {
     local source="$1"
     local target="$2"
 
+    # TODO: should prompt to overwrite existing files
     ln -sf "$source" "$target"
     # if [ -e "$target" ]; then
     #     echo "❌ $target already exists. Skipping."
