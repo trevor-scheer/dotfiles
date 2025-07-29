@@ -5,7 +5,7 @@ csssh() {
   temp="___setupCodespaceSSH.temp.js"
   gh api repos/VantaInc/obsidian/contents/scripts/setupCodespaceSSH.js \
     --jq '.content' | base64 -d > "$temp"
-  node "$temp"
+  node "$temp" > /dev/null 2>&1
   rm "$temp"
 }
 
@@ -13,10 +13,10 @@ newcs() {
   cs_id=$(gh cs create -R VantaInc/obsidian)
   
   echo -n "Codespace $cs_id created, waiting for it to be ready..."
-  status=""
-  while [ "$status" != "Available" ]; do
+  cs_status=""
+  while [ "$cs_status" != "Available" ]; do
     sleep 1
-    status=$(gh cs list | grep $cs_id | sed 's/.*obsidian//' | awk '{print $2}')
+    cs_status=$(gh cs list | grep $cs_id | sed 's/.*obsidian//' | awk '{print $2}')
     echo -n "."
   done
   echo " Codespace ready, setting up SSH"
@@ -27,7 +27,23 @@ newcs() {
 }
 
 opencs() {
-  echo "TODO"
+  # Use fzf to create a nice interactive selector
+  cs_id=$(gh cs list --json name,displayName,state,gitStatus | \
+    jq -r '.[] | "\(.name) \(.gitStatus.ref) (\(.state))"' | \
+    fzf --prompt="Select codespace: " | \
+    cut -d' ' -f1)
+
+  if [ -n "$cs_id" ]; then
+    echo "Starting codespace: $cs_id"
+    # this starts the codespace and there isn't a better way (dump the output, not interesting)
+    gh cs ports --codespace "$cs_id"
+
+    echo "Codespace ready, setting up SSH"
+
+    csssh
+      
+    cursor -n --folder-uri "vscode-remote://ssh-remote+${cs_id}.github.dev/workspaces/obsidian"
+  fi
 }
 
 stopcs() {
