@@ -1,14 +1,6 @@
 alias jdsw="just dev-start-web"
 alias mdsw="jdsw"
 
-csssh() {
-  temp="___setupCodespaceSSH.temp.js"
-  gh api repos/VantaInc/obsidian/contents/scripts/setupCodespaceSSH.js \
-    --jq '.content' | base64 -d > "$temp"
-  node "$temp" > /dev/null 2>&1
-  rm "$temp"
-}
-
 newcs() {
   cs_id=$(gh cs create -R VantaInc/obsidian)
   
@@ -19,15 +11,12 @@ newcs() {
     cs_status=$(gh cs list | grep $cs_id | sed 's/.*obsidian//' | awk '{print $2}')
     echo -n "."
   done
-  echo " Codespace ready, setting up SSH"
+  echo "\nCodespace ready, setting up SSH"
   
-  csssh
-  
-  cursor -n --folder-uri "vscode-remote://ssh-remote+${cs_id}.github.dev/workspaces/obsidian"
+  cs_configure_ssh_launch_cursor
 }
 
 opencs() {
-  # Use fzf to create a nice interactive selector
   cs_id=$(gh cs list --json name,displayName,state,gitStatus | \
     jq -r '.[] | "\(.name) \(.gitStatus.ref) (\(.state))"' | \
     fzf --prompt="Select codespace: " | \
@@ -36,22 +25,23 @@ opencs() {
   if [ -n "$cs_id" ]; then
     echo "Starting codespace: $cs_id"
     # this starts the codespace and there isn't a better way (dump the output, not interesting)
-    gh cs ports --codespace "$cs_id"
+    gh cs ports --codespace "$cs_id" > /dev/null 2>&1
 
     echo "Codespace ready, setting up SSH"
-
-    csssh
-      
-    cursor -n --folder-uri "vscode-remote://ssh-remote+${cs_id}.github.dev/workspaces/obsidian"
+    cs_configure_ssh_launch_cursor
   fi
 }
 
+cs_configure_ssh_launch_cursor() {
+  gh api repos/VantaInc/obsidian/contents/scripts/setupCodespaceSSH.js --jq '.content' | base64 -d | node - > /dev/null 2>&1
+  echo "Finished running setupCodespaceSSH.js"
+  echo "Launching cursor..."
+  cursor -n --folder-uri "vscode-remote://ssh-remote+${cs_id}.github.dev/workspaces/obsidian"
+}
+
 stopcs() {
-  temp="___shutdownCodespaces.temp.js"
   gh api repos/VantaInc/obsidian/contents/scripts/shutdownCodespaces.cjs \
-    --jq '.content' | base64 -d > "$temp"
-  node "$temp"
-  rm "$temp"
+    --jq '.content' | base64 -d | node -
 }
 
 turboclient() {
