@@ -6,7 +6,6 @@ echo "⏳ Loading shell utilities..."
 source $UTILITIES_DIR/docker.sh
 source $UTILITIES_DIR/git.sh
 source $UTILITIES_DIR/npm.sh
-source $UTILITIES_DIR/codespaces.sh
 source $UTILITIES_DIR/vanta.sh
 
 # Add Homebrew to PATH if installed
