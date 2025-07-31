@@ -44,10 +44,12 @@ fi
 source $DOTFILES_DIR/scripts/install/volta-and-node.sh
 
 source $DOTFILES_DIR/scripts/install/brew.sh
-echo "⏳ Installing Homebrew packages..."
-brew update
-brew upgrade
-brew bundle --file="$DOTFILES_DIR/Brewfile"
+if [ ! "$CODESPACE_NAME" ]; then
+    echo "⏳ Installing Homebrew packages..."
+    brew update
+    brew upgrade
+    brew bundle --file="$DOTFILES_DIR/Brewfile"
+fi
 echo "✅ Homebrew packages installed successfully."
 
 echo "✅ Common setup completed successfully."
