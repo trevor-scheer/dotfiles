@@ -2,6 +2,9 @@
 
 set -e
 
+if [ ! -e "$HOME/dotfiles" ]; then
+    ln -sf "$(dirname "${BASH_SOURCE[0]}")" "$HOME/dotfiles"
+fi
 DOTFILES_DIR="$HOME/dotfiles"
 
 echo "⏳ Setting up cross-platform dependencies..."
