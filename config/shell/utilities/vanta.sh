@@ -18,7 +18,7 @@ newcs() {
 
 opencs() {
   cs_id=$(gh cs list --json name,displayName,state,gitStatus,lastUsedAt | \
-    jq -r 'sort_by(.lastUsedAt) | .[] | "\(.name) \(.gitStatus.ref) (\(.state))"' | \
+    jq -r 'sort_by(.lastUsedAt) | reverse | .[] | "\(.name) \(.gitStatus.ref) (\(.state))"' | \
     fzf --prompt="Select codespace: " | \
     cut -d' ' -f1)
 
