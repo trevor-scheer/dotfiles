@@ -36,7 +36,8 @@ source $DOTFILES_DIR/scripts/install/zsh.sh
   # Change default shell to zsh if not already set
 if [[ "$SHELL" != *"zsh"* ]]; then
     echo "⏳ Changing default shell to zsh..."
-    chsh -s $(which zsh)
+    echo "⚠️ Actually not doing that because it's not working"
+    #chsh -s $(which zsh)
     echo "⚠️ You may need to restart your terminal for the shell change to take effect."
 fi
 
