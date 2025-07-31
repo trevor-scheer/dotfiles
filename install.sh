@@ -2,8 +2,10 @@
 
 set -e
 
+
+ORIGINAL_DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 if [ ! -e "$HOME/dotfiles" ]; then
-    ln -sf "$(dirname "${BASH_SOURCE[0]}")" "$HOME"
+    ln -s "$ORIGINAL_DOTFILES_DIR" "$HOME/dotfiles"
 fi
 DOTFILES_DIR="$HOME/dotfiles"
 
