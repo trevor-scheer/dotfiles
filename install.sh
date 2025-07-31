@@ -3,7 +3,7 @@
 set -e
 
 if [ ! -e "$HOME/dotfiles" ]; then
-    ln -sf "$(dirname "${BASH_SOURCE[0]}")" "$HOME/dotfiles"
+    ln -sf "$(dirname "${BASH_SOURCE[0]}")" "$HOME"
 fi
 DOTFILES_DIR="$HOME/dotfiles"
 
