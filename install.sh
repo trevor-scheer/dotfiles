@@ -3,11 +3,12 @@
 set -e
 
 
+DOTFILES_DIR="$HOME/dotfiles"
 ORIGINAL_DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 if [ ! -e "$HOME/dotfiles" ]; then
-    ln -s "$ORIGINAL_DOTFILES_DIR" "$HOME/dotfiles"
+    ln -s "$ORIGINAL_DOTFILES_DIR" "$DOTFILES_DIR"
 fi
-DOTFILES_DIR="$HOME/dotfiles"
+
 
 echo "⏳ Setting up cross-platform dependencies..."
 source $DOTFILES_DIR/scripts/setup-common.sh
