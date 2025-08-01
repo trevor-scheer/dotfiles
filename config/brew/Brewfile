@@ -12,6 +12,9 @@ brew "tree"
 # Brew volta doesn't work well...it's installed in the install.sh script instead
 # brew "volta"
 
+cask "1password"
+#cask "claude"
+#cask "claude-code"
 cask "discord"
 cask "google-chrome"
 cask "iterm2"
