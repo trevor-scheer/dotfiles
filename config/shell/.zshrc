@@ -8,8 +8,12 @@ source $UTILITIES_DIR/git.sh
 source $UTILITIES_DIR/npm.sh
 source $UTILITIES_DIR/vanta.sh
 
-# Add Homebrew to PATH if installed
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# Add Homebrew to PATH (linux and macOS)
+if [ -d /opt/homebrew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -d /home/linuxbrew/.linuxbrew ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
 
 # Add custom scripts to PATH
 export PATH="$HOME/bin:$PATH"
