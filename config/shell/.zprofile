@@ -10,8 +10,3 @@ SAVEHIST=10000
 HISTFILE=~/.zsh_history
 
 export DOTFILES_DIR="$HOME/dotfiles"
-
-# if in codespace, set VANTA=true
-if [ "$CODESPACES" ]; then
-  export VANTA=true
-fi
