@@ -6,14 +6,7 @@ echo "⏳ Loading shell utilities..."
 source $UTILITIES_DIR/docker.sh
 source $UTILITIES_DIR/git.sh
 source $UTILITIES_DIR/npm.sh
-
-# if VANTA env is truthy, load Vanta
-# else echo instructions to install Vanta
-if [[ -z "$VANTA" ]]; then
-  echo "⚠️  Vanta utilities not loaded. Set VANTA=true in .zprofile to enable."
-else
-  source $UTILITIES_DIR/vanta.sh
-fi
+source $UTILITIES_DIR/vanta.sh
 
 export HOMEBREW_BUNDLE_FILE="$DOTFILES_DIR/config/brew/Brewfile"
 # Add Homebrew to PATH if installed
