@@ -5,6 +5,7 @@ alias gcm="git checkout main"
 alias gp="git push"
 alias gs="git status"
 alias grc="git rebase --continue"
+alias grhh="git reset HEAD --hard"
 alias gprom="git pull --rebase origin main"
 
 fixup() {
