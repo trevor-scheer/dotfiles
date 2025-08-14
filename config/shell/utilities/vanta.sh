@@ -55,4 +55,6 @@ alias drs="docker container restart obsidian-web-client.internal-1"
 alias logs="make dev-watch-logs"
 alias yww="yarn workspace @vanta/web-client"
 
+alias codemod="./build-tools/vsx.sh scripts/refactoring-tools/src/gql/gql-tada-codemod.ts"
+
 echo "✅ Vanta utilities loaded."
