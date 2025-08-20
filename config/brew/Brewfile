@@ -13,12 +13,13 @@ brew "zoxide"
 # brew "volta"
 
 if RUBY_PLATFORM =~ /darwin/
-  brew "block-goose-cli"
+  #brew "block-goose-cli"
 
   cask "1password"
   #cask "claude"
   #cask "claude-code"
   cask "discord"
+  cask "ghostty"
   cask "google-chrome"
   cask "iterm2"
   cask "monitorcontrol"
