@@ -14,7 +14,7 @@ echo "⏳ Setting up cross-platform dependencies..."
 source $DOTFILES_DIR/scripts/setup-common.sh
 
 # Check if the script is being run in GitHub Codespaces
-if [ "$CODESPACE_NAME" ]; then
+if [ -n "$CODESPACES" ]; then
     echo "⏳ Setting up Codespaces specifics..."
     source "$DOTFILES_DIR/scripts/setup-codespaces.sh"
     exit 0
