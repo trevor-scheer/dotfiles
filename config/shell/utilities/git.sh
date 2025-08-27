@@ -2,6 +2,7 @@
 alias gb="git branch"
 alias gc="git commit"
 alias gcm="git checkout main"
+alias gc-="git checkout -"
 alias gp="git push"
 alias gs="git status"
 alias grc="git rebase --continue"
