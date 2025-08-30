@@ -7,17 +7,24 @@ set -e
 
 # Function to create symlinks
 create_symlink() {
-    local source="$1"
-    local target="$2"
+  local target="$1"
+  local link_path="$2"
 
-    # TODO: should prompt to overwrite existing files
-    ln -sf "$source" "$target"
-    # if [ -e "$target" ]; then
-    #     echo "❌ $target already exists. Skipping."
-    # else
-    #     ln -s "$source" "$target"
-    #     echo "✅ Created symlink from $source to $target"
-    # fi
+  # Ensure parent directory exists
+  mkdir -p "$(dirname "$link_path")"
+
+  # If symlink already exists and points to the right target, do nothing
+  if [ -L "$link_path" ] && [ "$(readlink "$link_path")" = "$target" ]; then
+    return 0
+  fi
+
+  # If file/symlink exists but is wrong, remove it
+  if [ -e "$link_path" ] || [ -L "$link_path" ]; then
+    rm -f "$link_path"
+  fi
+
+  # Create symlink
+  ln -s "$target" "$link_path"
 }
 
 echo "⏳ Setting up symlinks for configuration files..."
@@ -25,6 +32,7 @@ create_symlink "$DOTFILES_DIR/config/git/.gitconfig" "$HOME/.gitconfig"
 #create_symlink "$DOTFILES_DIR/config/shell/.bashrc" "$HOME/.bashrc"
 create_symlink "$DOTFILES_DIR/config/shell/.zshrc" "$HOME/.zshrc"
 create_symlink "$DOTFILES_DIR/config/shell/.zprofile" "$HOME/.zprofile"
+create_symlink "$DOTFILES_DIR/config/ghostty/config" "$HOME/.config/ghostty/config"
 
 source "$HOME/.zshrc"
 source "$HOME/.zprofile"
