@@ -12,9 +12,10 @@ brew "zoxide"
 # Brew volta doesn't work well...it's installed in the install.sh script instead
 # brew "volta"
 
-if RUBY_PLATFORM =~ /darwin/
+if ENV["CODESPACES"]
+  cask "cursor"
+elsif RUBY_PLATFORM =~ /darwin/
   #brew "block-goose-cli"
-
   cask "1password"
   #cask "claude"
   #cask "claude-code"
