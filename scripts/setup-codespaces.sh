@@ -1,5 +1,14 @@
 #!/bin/bash
 
+install_extensions() {
+  cat .devcontainer/devcontainer.json \
+    | npx strip-json-comments-cli \
+    | jq -r '.customizations.vscode.extensions[]' \
+    | while read -r extension; do
+        cursor --install-extension "$extension" || echo "Failed to install extension: $extension"
+      done
+}
+
 # Check if running in Codespaces
 if [ -n "$CODESPACES" ]; then
     # Add any Codespaces-specific setup here
@@ -17,12 +26,3 @@ if [ -n "$CODESPACES" ]; then
 else
     echo "❌ This script is intended to be run in GitHub Codespaces."
 fi
-
-install_extensions() {
-  cat .devcontainer/devcontainer.json \
-    | npx strip-json-comments-cli \
-    | jq -r '.customizations.vscode.extensions[]' \
-    | while read -r extension; do
-        cursor --install-extension "$extension" || echo "Failed to install extension: $extension"
-      done
-}
