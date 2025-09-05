@@ -52,7 +52,7 @@ yarnweb() {
   yarn workspace @vanta/web-client "$@"
 }
 
-install_extensions() {
+install-extensions() {
   cat .devcontainer/devcontainer.json \
     | npx strip-json-comments-cli \
     | jq -r '.customizations.vscode.extensions[]' \
@@ -60,11 +60,6 @@ install_extensions() {
         cursor --install-extension "$extension" || echo "Failed to install extension: $extension"
       done
 }
-
-# if in codespaces, install extensions
-if [ -n "$CODESPACES" ]; then
-  install_extensions
-fi
 
 alias tc=turboclient
 
