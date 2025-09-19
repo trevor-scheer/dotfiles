@@ -1,6 +1,8 @@
 export DOTFILES_DIR="$HOME/dotfiles"
 UTILITIES_DIR="$DOTFILES_DIR/config/shell/utilities"
 
+bindkey '^R' history-incremental-search-backward
+
 # Alias, etc.
 echo "⏳ Loading shell utilities..."
 source $UTILITIES_DIR/docker.sh
