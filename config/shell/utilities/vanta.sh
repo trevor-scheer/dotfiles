@@ -52,13 +52,20 @@ yarnweb() {
   yarn workspace @vanta/web-client "$@"
 }
 
-install-extensions() {
+cursor-extensions() {
   cat .devcontainer/devcontainer.json \
     | npx strip-json-comments-cli \
     | jq -r '.customizations.vscode.extensions[]' \
     | while read -r extension; do
         cursor --install-extension "$extension" || echo "Failed to install extension: $extension"
       done
+}
+
+vscode-extensions() {
+  cat .devcontainer/devcontainer.json | npx strip-json-comments-cli | jq -r '.customizations.vscode.extensions[]' | while read -r extension
+  do
+    code --install-extension "$extension" || echo "Failed to install extension: $extension"
+  done
 }
 
 alias tc=turboclient
