@@ -80,7 +80,10 @@ alias yww="yarnweb"
 function codemod() {
   ./build-tools/vsx.sh scripts/refactoring-tools/src/gql/gql-tada-codemod.ts "$@"
 }
-function gqlts() {
-  node ./parcel-plugins/parcel-transformer-gqlts/bin/index.js "**/src/**/*.(ts|tsx)"
+
+function e2e() {
+  codemod;
+  tc generate-client;
+  tc typecheck:no-incremental > out.txt;
 }
 echo "✅ Vanta utilities loaded."
