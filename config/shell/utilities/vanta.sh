@@ -78,8 +78,9 @@ alias jpp="just post-pull"
 alias yww="yarnweb"
 
 function codemod() {
-  # ./build-tools/vsx.sh scripts/refactoring-tools/src/gql/gql-tada-codemod.ts "$@"
+  ./build-tools/vsx.sh scripts/refactoring-tools/src/gql/gql-tada-codemod.ts "$@"
+}
+function gqlts() {
   node ./parcel-plugins/parcel-transformer-gqlts/bin/index.js "**/src/**/*.(ts|tsx)"
 }
-
 echo "✅ Vanta utilities loaded."
