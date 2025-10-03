@@ -1,3 +1,6 @@
+alias ..="cd .."
+alias ...="cd ../.."
+
 function zprofile() {
   code -w ~/.zprofile
   source ~/.zprofile
