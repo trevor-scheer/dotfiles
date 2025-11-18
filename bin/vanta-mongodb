@@ -1,0 +1,383 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2034
+# Connect to MongoDB via Compass on macOS or mongosh in Linux using Tailscale
+# for connectivity and aws-vault for authentication.
+set -euo pipefail
+
+# Handle colors and terminals with no colors
+RST=""
+RED=""
+GRN=""
+YLW=""
+BLU=""
+if test -t 1; then
+    ncolors=$(tput colors)
+    if test -n "$ncolors" && test "$ncolors" -ge 8; then
+        RST="$(tput sgr0)"
+        RED="$(tput setaf 1)"
+        GRN="$(tput setaf 2)"
+        YLW="$(tput setaf 3)"
+        BLU="$(tput setaf 4)"
+    fi
+fi
+
+# Common functions
+usage() {
+    >&2 echo -e "${RED}[!]${RST} usage: $0 <staging|staging-eu|staging-gov|prod|prod-eu|prod-gov|prod-global|dev|dev-global...>"
+    exit 1
+}
+
+info() {
+    >&2 echo -e "${GRN}[*]${RST} $1"
+}
+
+warn() {
+    >&2 echo -e "${YLW}[*]${RST} $1"
+}
+
+bail() {
+    >&2 echo -e "${RED}[!]${RST} $1"
+    >&2 echo -e "${BLU}[~]${RST} Docs: https://app.getguru.com/card/T6jjXGKc"
+    exit 1
+}
+
+speedbump() {
+  >&2 echo -n -e "${BLU}[?]${RST} $1 [y/N] " && read -s -n 1 -r && >&2 echo
+  if [[ ! $REPLY =~ ^[Yy] ]]; then
+    bail "Aborting..."
+  fi
+}
+
+require() {
+    if ! command -v "$1" &> /dev/null; then
+        bail "Command $1 not found. Is it installed?"
+    fi
+}
+
+# Check for needed programs
+if [[ "$OSTYPE" =~ ^darwin ]]; then
+    MONGODB_CLIENT="/Applications/MongoDB Compass.app/Contents/MacOS/MongoDB Compass"
+    TAILSCALE_BIN="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+else
+    MONGODB_CLIENT="$(which mongosh)"
+    TAILSCALE_BIN="/usr/bin/tailscale"
+fi
+require "aws-vault"
+require "grep"
+require "hostname"
+require "$MONGODB_CLIENT"
+require "$TAILSCALE_BIN"
+
+# Check for proper aws-vault version, e.g. v7.2.0 or 7.2.0-Homebrew
+if ! aws-vault --version 2>&1 | grep -E "^v?7\..*" &>/dev/null; then
+    bail "Please upgrade aws-vault to version v7.0.0 or higher."
+fi
+
+# Validate parameters
+if [ $# -lt 1 ]; then
+    usage
+fi
+# Main connect function
+connect() {
+    # Set parameters
+    # NOTE: keep case statements in sync with the top-level clusters array
+    USE_LOCAL="false"
+
+    USE_TAILSCALE="true"
+
+    # NOTE: keep proxy URIs in sync with MongoDB topology. This shouldn't™ be an
+    # issue if we're only *adding* new nodes, but it should use the full replica
+    # set when connecting.
+    # TODO: flip to default true after sc-178165 is complete
+    USE_PROXY="${USE_PROXY:-false}"
+
+    # NOTE(new-region): add new region cluster information here!
+    case "$1" in
+        staging)
+            CLUSTER_ID="staging"
+            DEFAULT_AWS_PROFILE="stagingmongoreadonly"
+            MONGO_URI="mongodb+srv://staging-pl-1.84tnf.mongodb.net/obsidian"
+            PROXY_URI="mongodb://mongodb-staging-34df62b7350e115c.elb.us-east-1.amazonaws.com:27017,mongodb-staging-34df62b7350e115c.elb.us-east-1.amazonaws.com:27018,mongodb-staging-34df62b7350e115c.elb.us-east-1.amazonaws.com:27019/obsidian"
+            PROXY_ARN="arn:aws:iam::734468753915:role/cyral-mongodb-staging-user"
+            SUBNET_ROUTER="low-trust"
+            ;;
+        staging-aus)
+            CLUSTER_ID="staging-aus"
+            DEFAULT_AWS_PROFILE="stagingmongoreadonly-aus"
+            MONGO_URI="mongodb+srv://staging-aus-pl-0.ffh9p.mongodb.net/obsidian"
+            PROXY_URI="mongodb://mongodb-staging-aus-3cab027f61ce6d41.elb.us-east-1.amazonaws.com:27017,mongodb-staging-aus-3cab027f61ce6d41.elb.us-east-1.amazonaws.com:27018,mongodb-staging-aus-3cab027f61ce6d41.elb.us-east-1.amazonaws.com:27019/obsidian"
+            PROXY_ARN="arn:aws:iam::734468753915:role/cyral-mongodb-staging-aus-user"
+            SUBNET_ROUTER="low-trust"
+            ;;
+        staging-eu)
+            CLUSTER_ID="staging-eu"
+            DEFAULT_AWS_PROFILE="stagingmongoreadonly-eu"
+            MONGO_URI="mongodb+srv://staging-eu-pl-0.rfg0b.mongodb.net/obsidian"
+            PROXY_URI="mongodb://mongodb-staging-eu-9d5b79d18ef3a757.elb.us-east-1.amazonaws.com:27017,mongodb-staging-eu-9d5b79d18ef3a757.elb.us-east-1.amazonaws.com:27018,mongodb-staging-eu-9d5b79d18ef3a757.elb.us-east-1.amazonaws.com:27019/obsidian"
+            PROXY_ARN="arn:aws:iam::734468753915:role/cyral-mongodb-staging-eu-user"
+            SUBNET_ROUTER="low-trust"
+            ;;
+        staging-gov)
+            CLUSTER_ID="staging-gov"
+            DEFAULT_AWS_PROFILE="stagingmongoreadonly-gov"
+            MONGO_URI="mongodb+srv://staging-gov.b6fge6.mongodbgov.net/obsidian"
+            # We use AWS VPN for gov connectivity, not Tailscale
+            SUBNET_ROUTER=""
+            USE_TAILSCALE="false"
+            ;;
+        staging-global)
+            CLUSTER_ID="staging-global"
+            DEFAULT_AWS_PROFILE="stagingmongoreadonly-eu"
+            DEFAULT_AWS_PROFILE="stagingmongoreadonly"
+            MONGO_URI="mongodb+srv://staging-global-pl-0.okzmh.mongodb.net/obsidian"
+            PROXY_URI="mongodb://mongodb-staging-global-11971744c91a4480.elb.us-east-1.amazonaws.com:27017,mongodb-staging-global-11971744c91a4480.elb.us-east-1.amazonaws.com:27018,mongodb-staging-global-11971744c91a4480.elb.us-east-1.amazonaws.com:27019,mongodb-staging-global-11971744c91a4480.elb.us-east-1.amazonaws.com:27020,mongodb-staging-global-11971744c91a4480.elb.us-east-1.amazonaws.com:27021/obsidian"
+            PROXY_ARN="arn:aws:iam::734468753915:role/cyral-mongodb-staging-global-user"
+            SUBNET_ROUTER="low-trust"
+            ;;
+        prod)
+            CLUSTER_ID="prod"
+            DEFAULT_AWS_PROFILE="prodmongoreadonly"
+            MONGO_URI="mongodb+srv://prod-pl-1.s1uwx.mongodb.net/obsidian"
+            PROXY_URI="mongodb://mongodb-prod-041ab884c7af46f1.elb.us-east-1.amazonaws.com:27017,mongodb-prod-041ab884c7af46f1.elb.us-east-1.amazonaws.com:27018,mongodb-prod-041ab884c7af46f1.elb.us-east-1.amazonaws.com:27019,mongodb-prod-041ab884c7af46f1.elb.us-east-1.amazonaws.com:27020/obsidian"
+            PROXY_ARN="arn:aws:iam::734468753915:role/cyral-mongodb-prod-user"
+            SUBNET_ROUTER="high-trust"
+            ;;
+        prod-aus)
+            CLUSTER_ID="prod-aus"
+            DEFAULT_AWS_PROFILE="prodmongoreadonly-aus"
+            MONGO_URI="mongodb+srv://prod-aus-pl-0.f0sew.mongodb.net/obsidian"
+            PROXY_URI="mongodb://mongodb-prod-aus-1951e43bb89c2996.elb.us-east-1.amazonaws.com:27017,mongodb-prod-aus-1951e43bb89c2996.elb.us-east-1.amazonaws.com:27018,mongodb-prod-aus-1951e43bb89c2996.elb.us-east-1.amazonaws.com:27019/obsidian"
+            PROXY_ARN="arn:aws:iam::734468753915:role/cyral-mongodb-prod-aus-user"
+            SUBNET_ROUTER="high-trust"
+            ;;
+        prod-eu)
+            CLUSTER_ID="prod-eu"
+            DEFAULT_AWS_PROFILE="prodmongoreadonly-eu"
+            MONGO_URI="mongodb+srv://prod-eu-pl-0.6cgko.mongodb.net/obsidian"
+            PROXY_URI="mongodb://mongodb-prod-eu-382f0286d06856d3.elb.us-east-1.amazonaws.com:27017,mongodb-prod-eu-382f0286d06856d3.elb.us-east-1.amazonaws.com:27018,mongodb-prod-eu-382f0286d06856d3.elb.us-east-1.amazonaws.com:27019/obsidian"
+            PROXY_ARN="arn:aws:iam::734468753915:role/cyral-mongodb-prod-eu-user"
+            SUBNET_ROUTER="high-trust"
+            ;;
+        prod-gov)
+            CLUSTER_ID="prod-gov"
+            DEFAULT_AWS_PROFILE="prodmongoreadonly-gov"
+            MONGO_URI="mongodb+srv://prod-gov.ugbjax.mongodbgov.net/obsidian"
+            # We use AWS VPN for gov connectivity, not Tailscale
+            SUBNET_ROUTER=""
+            USE_TAILSCALE="false"
+            ;;
+        prod-global)
+            CLUSTER_ID="prod-global"
+            DEFAULT_AWS_PROFILE="prodmongoreadonly"
+            MONGO_URI="mongodb+srv://prod-global-pl-0.4ppxj.mongodb.net/obsidian"
+            PROXY_URI="mongodb://mongodb-prod-global-3483fc4ee6a71794.elb.us-east-1.amazonaws.com:27017,mongodb-prod-global-3483fc4ee6a71794.elb.us-east-1.amazonaws.com:27018,mongodb-prod-global-3483fc4ee6a71794.elb.us-east-1.amazonaws.com:27019,mongodb-prod-global-3483fc4ee6a71794.elb.us-east-1.amazonaws.com:27020,mongodb-prod-global-3483fc4ee6a71794.elb.us-east-1.amazonaws.com:27021/obsidian"
+            PROXY_ARN="arn:aws:iam::734468753915:role/cyral-mongodb-prod-global-user"
+            SUBNET_ROUTER="high-trust"
+            ;;
+        qa-infra)
+            CLUSTER_ID="qa-infra"
+            DEFAULT_AWS_PROFILE="qainframongoreadonly"
+            MONGO_URI="mongodb+srv://qa-infra.pdnqk.mongodb.net/obsidian"
+            PROXY_URI=""
+            PROXY_ARN=""
+            SUBNET_ROUTER="low-trust"
+            ;;
+        qa-infra-global)
+            CLUSTER_ID="qa-infra-global"
+            DEFAULT_AWS_PROFILE="qainframongoreadonly"
+            MONGO_URI="mongodb+srv://qa-infra-global.byhev.mongodb.net/obsidian"
+            PROXY_URI=""
+            PROXY_ARN=""
+            SUBNET_ROUTER="low-trust"
+            ;;
+        local|dev)
+            CLUSTER_ID="dev"
+            AWS_PROFILE=""
+            MONGO_URI="mongodb://localhost:27017/obsidian"
+            PROXY_URI=""
+            PROXY_ARN=""
+            SUBNET_ROUTER=""
+            USE_LOCAL="true"
+            ;;
+        local-global|dev-global)
+            CLUSTER_ID="dev-global"
+            AWS_PROFILE=""
+            MONGO_URI="mongodb://localhost:27018/obsidian"
+            PROXY_URI=""
+            PROXY_ARN=""
+            SUBNET_ROUTER=""
+            USE_LOCAL="true"
+            ;;
+        fake-profile)
+            CLUSTER_ID="fake"
+            AWS_PROFILE="thereshouldbenoprofilehere"
+            MONGO_URI="mongodb://localhost:27017/obsidian"
+            PROXY_URI=""
+            PROXY_ARN=""
+            SUBNET_ROUTER="low-trust"
+            ;;
+        fake-subnet-router)
+            CLUSTER_ID="fake"
+            AWS_PROFILE="stagingmongoreadonly"
+            MONGO_URI="mongodb://localhost:27017/obsidian"
+            PROXY_URI=""
+            PROXY_ARN=""
+            SUBNET_ROUTER="there-should-be-no-router"
+            ;;
+        *)
+            >&2 echo -e "${RED}[!]${RST} Invalid environment: $1."
+            usage
+            ;;
+    esac
+
+    # Handle local database
+    if [ "$USE_LOCAL" = "true" ]; then
+        CONNECTION_URI="$MONGO_URI?readPreference=primary&appName=$(hostname)&directConnection=true&ssl=false"
+        info "Environment:       $1"
+        info "Connection string: $CONNECTION_URI"
+        info "Launching $MONGODB_CLIENT..."
+        if [[ "$OSTYPE" =~ ^darwin ]]; then
+            open -n -a "$MONGODB_CLIENT" --args "$CONNECTION_URI"
+        else
+            "$MONGODB_CLIENT" "$CONNECTION_URI"
+        fi
+        exit 0
+    fi
+
+    # Handle remote databases
+    TARGET_AWS_PROFILE="${AWS_PROFILE:-$DEFAULT_AWS_PROFILE}"
+    if [[ "$USE_PROXY" = "true" ]]; then
+        # Rewrite MongoDB URI to go through a proxy
+        MONGO_URI="$PROXY_URI"
+    fi
+    CONNECTION_URI="$MONGO_URI?readPreference=secondary&appName=$(hostname)&authSource=%24external&authMechanism=MONGODB-AWS"
+    info "Environment:       $1"
+    info "AWS profile:       $TARGET_AWS_PROFILE"
+    info "Connection string: $CONNECTION_URI"
+    info "Proxy (Cyral):     $USE_PROXY"
+
+    # Resources
+    ALL_TICKETS="https://vanta.freshservice.com/support/tickets"
+    AWS_CONFIG="https://github.com/VantaInc/obsidian/blob/main/.devcontainer/config_files/aws_config"
+    AWS_LOGIN="https://vanta.awsapps.com/start"
+    AWS_LOGOUT="https://vanta.awsapps.com/start#/signout"
+    NEW_TICKET="https://vanta.freshservice.com/support/catalog/items/114"
+
+    # Check for AWS authentication
+    info "Checking AWS profile..."
+    if ! aws-vault list --profiles | grep -E "^$TARGET_AWS_PROFILE\$" &>/dev/null; then
+        bail "Could not find $TARGET_AWS_PROFILE. Please update ~/.aws/config to add it. See: $AWS_CONFIG"
+    fi
+
+    # Check for prodmongoreadonly profile https://app.shortcut.com/vanta/story/161580/add-accidentally-persisted-credentials-pre-flight-check
+    info "Checking for persisted credentials..."
+    if aws-vault list --credentials | grep -E "^$TARGET_AWS_PROFILE$" &>/dev/null; then
+        warn "[profile ${TARGET_AWS_PROFILE}] has a persisted credential. You may need to delete it with 'aws-vault remove ${TARGET_AWS_PROFILE}'"
+    fi
+
+    info "Checking access to $TARGET_AWS_PROFILE..."
+    if ! aws-vault exec "$TARGET_AWS_PROFILE" -- echo -n; then
+        msg="Could not authenticate to $TARGET_AWS_PROFILE. Please check if you have access ($AWS_LOGIN) or submit a ticket to request it ($NEW_TICKET). If you just got approved, you'll have to log out ($AWS_LOGOUT) and try again."
+        bail "$msg"
+    fi
+    if [[ "$USE_TAILSCALE" = "true" ]]; then
+        # Check for Tailscale connectivity
+        info "Checking Tailscale..."
+        TAILSCALE_OUTPUT=$("$TAILSCALE_BIN" status --self=false --peers 2>&1 ||:)
+        if echo "$TAILSCALE_OUTPUT" | grep -E "(Logged out\.|Tailscale is stopped\.|is Tailscale running\?)"; then
+            bail "Is Tailscale running and are you logged in?"
+        elif ! echo "$TAILSCALE_OUTPUT" | grep -E "$SUBNET_ROUTER" &>/dev/null; then
+            msg="Could not get connectivity to $SUBNET_ROUTER. Please ensure you have an approved access request to the $TARGET_AWS_PROFILE role ($ALL_TICKETS) or submit a ticket to request it ($NEW_TICKET). If you do, and it's still not working, please escalate to #dev-environment-feedback."
+            bail "$msg"
+        fi
+    fi
+
+    # Warn if read-write
+    if [[ "$TARGET_AWS_PROFILE" =~ prodmongoreadwrite.* ]]; then
+        warn "You are connecting to a read-write database. Please be careful!"
+        sleep 10 # Yes, we want to make this a tiny bit annoying.
+    fi
+
+    # Launch!
+    if [[ "$USE_PROXY" = "true" ]]; then
+        # Resolve the caller's email address from SAML/SSO
+        EMAIL=$(aws-vault exec "$TARGET_AWS_PROFILE" -- aws sts get-caller-identity --query UserId --output text | cut -d: -f2)
+
+        # Resolve the role session name
+        ROLE_SESSION_SUFFIX="readonly"
+        if [[ "$TARGET_AWS_PROFILE" =~ .*readwrite.* ]]; then
+            ROLE_SESSION_SUFFIX="readwrite"
+        fi
+        ROLE_SESSION_NAME="${EMAIL},mongodb-${CLUSTER_ID}-${ROLE_SESSION_SUFFIX}"
+
+        # Assume the proxy user
+        info "Assuming proxy role $PROXY_ARN..."
+        # shellcheck disable=SC2207
+        CREDENTIALS=($(aws-vault exec "$TARGET_AWS_PROFILE" -- aws sts assume-role --role-arn "$PROXY_ARN" --role-session-name "$ROLE_SESSION_NAME" --query Credentials --output text))
+        AWS_ACCESS_KEY_ID="${CREDENTIALS[0]}"
+        AWS_SECRET_ACCESS_KEY="${CREDENTIALS[2]}"
+        AWS_SESSION_TOKEN="${CREDENTIALS[3]}"
+
+        info "Launching $MONGODB_CLIENT..."
+        if [[ "$OSTYPE" =~ ^darwin ]]; then
+            open -n -a "$MONGODB_CLIENT" --args "$CONNECTION_URI" --trustedConnectionString
+        else
+            "$MONGODB_CLIENT" "$CONNECTION_URI"
+        fi
+    else
+        # Connect to MongoDB cluster
+        info "Launching $MONGODB_CLIENT..."
+        if [[ "$OSTYPE" =~ ^darwin ]]; then
+            aws-vault exec "$TARGET_AWS_PROFILE" -- open -n -a "$MONGODB_CLIENT" --args "$CONNECTION_URI"
+        else
+            aws-vault exec "$TARGET_AWS_PROFILE" -- "$MONGODB_CLIENT" "$CONNECTION_URI"
+        fi
+    fi
+}
+
+# Identify targeted clusters
+targets=()
+# NOTE: keep this in sync with the case statements in the connect function
+clusters=(
+    "prod"
+    "prod-aus"
+    "prod-eu"
+    "prod-global"
+    "prod-gov"
+    "staging"
+    "staging-aus"
+    "staging-eu"
+    "staging-gov"
+    "staging-global"
+
+    "qa-infra"
+    "qa-infra-global"
+
+    "dev"
+    "dev-global"
+    "local"
+    "local-global"
+
+    "fake-profile"
+    "fake-subnet-router"
+)
+
+for target in "$@"; do
+    for cluster in "${clusters[@]}"; do
+        # Need to enable glob matching to support things like "staging*"
+        # shellcheck disable=SC2053
+        if [[ $cluster == $target ]]; then
+            targets+=("$cluster")
+        fi
+    done
+done
+
+if [ ${#targets[@]} -eq 0 ]; then
+    bail "Invalid environment(s): $*"
+elif [ ${#targets[@]} -gt 1 ]; then
+    speedbump "Invoke multiple environments? ${targets[*]}"
+fi
+
+for target in "${targets[@]}"; do
+    connect "$target"
+done
