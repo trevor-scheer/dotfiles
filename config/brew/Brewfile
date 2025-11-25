@@ -1,33 +1,30 @@
-brew "fzf"
-brew "gh"
-brew "jq"
-brew "lazydocker"
-brew "lazygit"
-brew "neovim"
-brew "python@3.11"
-#brew "ripgrep"
-brew "tmux"
-brew "tree"
-brew "zoxide"
-# Brew volta doesn't work well...it's installed in the install.sh script instead
-# brew "volta"
-
 if ENV["CODESPACES"]
   cask "claude-code"
 elsif RUBY_PLATFORM =~ /darwin/
   #brew "block-goose-cli"
+  brew "fzf"
+  brew "gh"
+  brew "jq"
+  brew "lazydocker"
+  brew "lazygit"
+  brew "neovim"
+  brew "python@3.11"
+  #brew "ripgrep"
+  brew "tmux"
+  brew "tree"
+  brew "zoxide"
+  # Brew volta doesn't work well...it's installed in the install.sh script instead
+  # brew "volta"
+  
   cask "1password"
-  #cask "claude"
-  #cask "claude-code"
   cask "cursor"
   cask "discord"
   cask "ghostty"
   cask "google-chrome"
-  #cask "iterm2"
   cask "monitorcontrol"
-  #cask "ollama-app"
   cask "plex"
   cask "raycast"
   cask "spotify"
   cask "visual-studio-code"
+
 end
