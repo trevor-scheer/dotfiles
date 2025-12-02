@@ -15,7 +15,8 @@
 [pull]
 	rebase = true
 
-#[branch]
+[branch]
+  sort = -committerdate
 #	autoSetupMerge = simple
 
 [push]
