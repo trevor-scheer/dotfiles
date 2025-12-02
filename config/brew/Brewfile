@@ -8,6 +8,7 @@ elsif RUBY_PLATFORM =~ /darwin/
   brew "lazydocker"
   brew "lazygit"
   brew "neovim"
+  brew "podman"
   brew "python@3.11"
   #brew "ripgrep"
   brew "tmux"
