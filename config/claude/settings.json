@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git branch:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git show:*)",
+      "Bash(git ls-files:*)",
+      "Bash(git remote:*)",
+      "Bash(git fetch:*)",
+      "Bash(ls:*)",
+      "Bash(tree:*)",
+      "Bash(find:*)",
+      "Bash(pwd:*)",
+      "Bash(which:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(grep:*)",
+      "Bash(ps:*)",
+      "Bash(du:*)",
+      "WebFetch",
+      "WebSearch",
+      "Skill(create-pr)",
+      "Skill(review-pr)",
+      "Skill(bug-fix-workflow)",
+      "Skill(simplify)"
+    ],
+    "defaultMode": "acceptEdits"
+  }
+}

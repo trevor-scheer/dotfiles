@@ -33,6 +33,8 @@ create_symlink "$DOTFILES_DIR/config/git/.gitconfig" "$HOME/.gitconfig"
 create_symlink "$DOTFILES_DIR/config/shell/.zshrc" "$HOME/.zshrc"
 create_symlink "$DOTFILES_DIR/config/shell/.zprofile" "$HOME/.zprofile"
 create_symlink "$DOTFILES_DIR/config/ghostty/config" "$HOME/.config/ghostty/config"
+create_symlink "$DOTFILES_DIR/config/claude/settings.json" "$HOME/.claude/settings.json"
+create_symlink "$DOTFILES_DIR/config/claude/skills" "$HOME/.claude/skills"
 
 source "$HOME/.zshrc"
 source "$HOME/.zprofile"
