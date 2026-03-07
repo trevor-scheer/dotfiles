@@ -1,5 +1,13 @@
 if ENV["CODESPACES"] || ENV["GITPOD_WORKSPACE_ID"]
   cask "claude-code"
+
+  # Agent-oriented tools (context-efficient for AI coding agents)
+  brew "ast-grep"
+  brew "difftastic"
+  brew "sd"
+  brew "scc"
+  brew "shellcheck"
+  brew "yq"
 elsif RUBY_PLATFORM =~ /darwin/
   brew "fzf"
   brew "gh"
@@ -12,6 +20,14 @@ elsif RUBY_PLATFORM =~ /darwin/
   brew "tmux"
   brew "tree"
   brew "zoxide"
+
+  # Agent-oriented tools (context-efficient for AI coding agents)
+  brew "ast-grep"
+  brew "difftastic"
+  brew "sd"
+  brew "scc"
+  brew "shellcheck"
+  brew "yq"
   # Brew volta doesn't work well...it's installed in the install.sh script instead
   # brew "volta"
   
