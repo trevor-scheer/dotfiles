@@ -16,6 +16,7 @@ elsif RUBY_PLATFORM =~ /darwin/
   # brew "volta"
   
   cask "1password"
+  cask "claude"
   cask "claude-code"
   cask "cursor"
   cask "discord"
