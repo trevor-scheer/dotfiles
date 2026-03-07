@@ -1,4 +1,7 @@
 {
+  "preferences": {
+    "enableCommitSignOff": false
+  },
   "permissions": {
     "allow": [
       "Read",
