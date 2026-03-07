@@ -2,6 +2,36 @@
 
 Global preferences symlinked to `~/.claude/CLAUDE.md` — applies to all projects.
 
+## Default Workflow
+
+Follow this workflow for all tasks unless the change is truly trivial (single-line fix, typo, etc.).
+
+### 1. Question the premise
+
+Before accepting a request at face value, think critically about whether the user is asking the right question. Consider the XY problem — the user may be describing a solution (Y) when the real issue is something else (X). If you suspect the request could be better framed, say so and suggest an alternative approach before proceeding.
+
+### 2. Ask clarifying questions
+
+Remove all ambiguity before writing any code. Do not assume intent, scope, or constraints — ask. This includes:
+- Edge cases and expected behavior
+- Which parts of the codebase are in scope
+- Compatibility or backwards-compatibility requirements
+- Whether there are related changes the user hasn't mentioned
+
+Make no assumptions. If something is unclear, ask.
+
+### 3. Plan first
+
+Default to plan mode (`/plan`) for any non-trivial change. Present a concrete implementation plan — files to change, approach, trade-offs — and get approval before writing code. This avoids wasted effort on the wrong approach.
+
+### 4. Ensure a validation mechanism exists
+
+Before building, confirm you have a way to validate your work: tests, type checks, linting, a build step, or a script you can run. If no validation mechanism exists for the area you're changing, encourage creating one first. You should be able to iterate on your own work and catch errors without requiring the user to debug for you.
+
+### 5. Build and iterate
+
+Once the plan is approved and validation is in place, implement the changes. Run validation after each meaningful step. Fix issues as you find them rather than delivering broken work.
+
 ## Agent-Oriented CLI Tools
 
 These tools are installed via Brewfile and are **preferred over their traditional counterparts** for context efficiency. Use them proactively.
