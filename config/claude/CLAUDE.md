@@ -26,11 +26,23 @@ Default to plan mode (`/plan`) for any non-trivial change. Present a concrete im
 
 ### 4. Ensure a validation mechanism exists
 
-Before building, confirm you have a way to validate your work: tests, type checks, linting, a build step, or a script you can run. If no validation mechanism exists for the area you're changing, encourage creating one first. You should be able to iterate on your own work and catch errors without requiring the user to debug for you.
+Before building, confirm you have a way to validate your work independently — without requiring the user to manually test or debug for you. The goal is autonomous iteration: you should be able to make a change, verify it works, and fix issues on your own.
+
+Validation is not limited to unit tests. Consider what's appropriate for the change:
+- **Tests** (unit, integration, e2e) — the most common mechanism. Run existing tests, add new ones for new behavior.
+- **Type checking / linting** — run `tsc`, `eslint`, `shellcheck`, etc. to catch errors statically.
+- **Build steps** — confirm the project compiles and bundles successfully.
+- **Browser/UI validation** — for frontend changes, set up or use tools like Playwright, Puppeteer, or Storybook to verify visual/interactive behavior programmatically.
+- **Script-based validation** — write a small script that exercises the change and asserts expected output.
+- **REPL / manual invocation** — run the changed code directly and inspect output.
+
+If no validation mechanism exists for the area you're changing, **create one as part of the plan**. This is not optional overhead — it's a prerequisite. Propose adding a test harness, a Playwright test, a build script, or whatever is appropriate. The user should approve this as part of the plan in step 3.
+
+You are empowered to install tools, create test files, and build whatever framework is needed to validate your work. The investment pays for itself by enabling you to iterate confidently and arrive at correct solutions without user intervention.
 
 ### 5. Build and iterate
 
-Once the plan is approved and validation is in place, implement the changes. Run validation after each meaningful step. Fix issues as you find them rather than delivering broken work.
+Once the plan is approved and validation is in place, implement the changes. Run validation after each meaningful step — don't batch up changes and hope they work. When validation fails, diagnose and fix the issue yourself before moving on. The user should receive working, validated code, not a first draft.
 
 ## Agent-Oriented CLI Tools
 
