@@ -3,22 +3,6 @@
   "lastOnboardingVersion": "2.1.63",
   "shiftEnterKeyBindingInstalled": true,
   "effortCalloutDismissed": true,
-  "projects": {
-    "/workspaces/obsidian": {
-      "allowedTools": [],
-      "mcpContextUris": [],
-      "mcpServers": {},
-      "enabledMcpjsonServers": [],
-      "disabledMcpjsonServers": [],
-      "hasTrustDialogAccepted": true,
-      "projectOnboardingSeenCount": 0,
-      "hasClaudeMdExternalIncludesApproved": false,
-      "hasClaudeMdExternalIncludesWarningShown": false
-    }
-  },
-  "githubRepoPaths": {
-    "vantainc/obsidian": [
-      "/workspaces/obsidian"
-    ]
-  }
+  "projects": {},
+  "githubRepoPaths": {}
 }

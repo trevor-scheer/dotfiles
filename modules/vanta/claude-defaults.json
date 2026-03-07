@@ -1,0 +1,20 @@
+{
+  "projects": {
+    "/workspaces/obsidian": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false
+    }
+  },
+  "githubRepoPaths": {
+    "vantainc/obsidian": [
+      "/workspaces/obsidian"
+    ]
+  }
+}

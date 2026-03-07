@@ -23,3 +23,4 @@ fixup() {
     echo "No unstaged changes found."
   fi
 }
+

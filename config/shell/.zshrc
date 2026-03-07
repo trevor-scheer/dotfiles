@@ -7,7 +7,6 @@ bindkey '^R' history-incremental-search-backward
 source $UTILITIES_DIR/docker.sh
 source $UTILITIES_DIR/git.sh
 source $UTILITIES_DIR/npm.sh
-source $UTILITIES_DIR/vanta.sh
 
 export HOMEBREW_BUNDLE_FILE="$DOTFILES_DIR/config/brew/Brewfile"
 # Add Homebrew to PATH if installed
@@ -29,4 +28,12 @@ zstyle ':vcs_info:git:*' formats '%b '
 setopt PROMPT_SUBST
 PROMPT='%F{green}%*%f %F{blue}%~%f %F{red}${vcs_info_msg_0_}%f$ '
 
+# Source optional modules (e.g. work-specific configs in modules/*/)
+for module_shell in $DOTFILES_DIR/modules/*/shell.sh; do
+  [ -f "$module_shell" ] && source "$module_shell"
+done
 
+# Add module bin directories to PATH
+for module_bin in $DOTFILES_DIR/modules/*/bin; do
+  [ -d "$module_bin" ] && export PATH="$module_bin:$PATH"
+done
