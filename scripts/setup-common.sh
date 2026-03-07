@@ -52,6 +52,8 @@ fi
 
 source $DOTFILES_DIR/scripts/install/volta-and-node.sh
 
+source $DOTFILES_DIR/scripts/install/rustup.sh
+
 source $DOTFILES_DIR/scripts/install/brew.sh
 
 export HOMEBREW_BUNDLE_FILE="$DOTFILES_DIR/config/brew/Brewfile"
