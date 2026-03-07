@@ -20,13 +20,13 @@ source "$HOME/.zprofile"
 # Main setup function
 log_info "Setting up shell and common cross-platform dependencies..."
 
-source $DOTFILES_DIR/scripts/install/zsh.sh
+source "$DOTFILES_DIR/scripts/install/zsh.sh"
 
-source $DOTFILES_DIR/scripts/install/volta-and-node.sh
+source "$DOTFILES_DIR/scripts/install/volta-and-node.sh"
 
-source $DOTFILES_DIR/scripts/install/rustup.sh
+source "$DOTFILES_DIR/scripts/install/rustup.sh"
 
-source $DOTFILES_DIR/scripts/install/brew.sh
+source "$DOTFILES_DIR/scripts/install/brew.sh"
 
 export HOMEBREW_BUNDLE_FILE="$DOTFILES_DIR/config/brew/Brewfile"
 
