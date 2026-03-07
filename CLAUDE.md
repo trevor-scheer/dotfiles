@@ -57,6 +57,7 @@ This detects the OS/environment, symlinks config files to `$HOME`, and installs 
 7. Skills
 
 **Other claude config:**
+- `config/claude/CLAUDE.md` — Shared global preferences symlinked to `~/.claude/CLAUDE.md` (agent tool preferences, etc.)
 - `config/claude/claude.json` — Onboarding defaults (skip wizard, etc.)
 - `config/claude/skills/` — Shared skill definitions (create-pr, review-pr, bug-fix-workflow)
 

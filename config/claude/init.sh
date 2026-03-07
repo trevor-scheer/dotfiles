@@ -3,6 +3,7 @@
 # Initialize Claude Code configuration for new environments
 
 create_symlink "$DOTFILES_DIR/config/claude/settings.json" "$HOME/.claude/settings.json"
+create_symlink "$DOTFILES_DIR/config/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 create_symlink "$DOTFILES_DIR/config/claude/skills" "$HOME/.claude/skills"
 
 # Seed ~/.claude.json to skip the onboarding wizard
