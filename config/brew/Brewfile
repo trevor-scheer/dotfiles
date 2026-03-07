@@ -1,5 +1,6 @@
 if ENV["CODESPACES"] || ENV["GITPOD_WORKSPACE_ID"]
   cask "claude-code"
+  brew "stow"
 
   # Agent-oriented tools (context-efficient for AI coding agents)
   brew "ast-grep"
@@ -17,6 +18,7 @@ elsif RUBY_PLATFORM =~ /darwin/
   brew "neovim"
   brew "podman"
   brew "python@3.11"
+  brew "stow"
   brew "tmux"
   brew "tree"
   brew "zoxide"
