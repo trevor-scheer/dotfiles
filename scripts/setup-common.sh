@@ -29,7 +29,6 @@ create_symlink() {
 
 echo "⏳ Setting up symlinks for configuration files..."
 create_symlink "$DOTFILES_DIR/config/git/.gitconfig" "$HOME/.gitconfig"
-#create_symlink "$DOTFILES_DIR/config/shell/.bashrc" "$HOME/.bashrc"
 create_symlink "$DOTFILES_DIR/config/shell/.zshrc" "$HOME/.zshrc"
 create_symlink "$DOTFILES_DIR/config/shell/.zprofile" "$HOME/.zprofile"
 create_symlink "$DOTFILES_DIR/config/ghostty/config" "$HOME/.config/ghostty/config"
@@ -42,13 +41,6 @@ source "$HOME/.zprofile"
 echo "⏳ Setting up shell and common cross-platform dependencies..."
 
 source $DOTFILES_DIR/scripts/install/zsh.sh
-  # Change default shell to zsh if not already set
-if [[ "$SHELL" != *"zsh"* ]]; then
-    echo "⏳ Changing default shell to zsh..."
-    echo "⚠️ Actually not doing that because it's not working"
-    #chsh -s $(which zsh)
-    echo "⚠️ You may need to restart your terminal for the shell change to take effect."
-fi
 
 source $DOTFILES_DIR/scripts/install/volta-and-node.sh
 
