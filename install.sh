@@ -13,9 +13,9 @@ fi
 echo "⏳ Setting up cross-platform dependencies..."
 source $DOTFILES_DIR/scripts/setup-common.sh
 
-# Check if the script is being run in GitHub Codespaces
-if [ -n "$CODESPACES" ]; then
-    echo "⏳ Setting up Codespaces specifics..."
+# Check if the script is being run in a cloud dev environment (Codespaces or Gitpod)
+if [ -n "$CODESPACES" ] || [ -n "$GITPOD_WORKSPACE_ID" ]; then
+    echo "⏳ Setting up cloud environment specifics..."
     source "$DOTFILES_DIR/scripts/setup-codespaces.sh"
     exit 0
 fi

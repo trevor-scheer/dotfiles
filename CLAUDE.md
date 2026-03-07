@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-Personal dotfiles repo managing development environment configs across macOS, Linux, and GitHub Codespaces. All scripts are idempotent.
+Personal dotfiles repo managing development environment configs across macOS, Linux, and cloud dev environments (GitHub Codespaces / Gitpod). All scripts are idempotent.
 
 ## Setup
 
@@ -19,7 +19,7 @@ This detects the OS/environment, symlinks config files to `$HOME`, and installs 
 **`install.sh`** is the entry point. It sources platform-specific scripts from `scripts/`:
 - `setup-common.sh` — always runs: creates symlinks, installs Zsh/Volta/Homebrew, runs `brew bundle`
 - `setup-macos.sh` — installs Xcode CLI tools
-- `setup-linux.sh` / `setup-codespaces.sh` — minimal platform stubs
+- `setup-linux.sh` / `setup-codespaces.sh` — minimal platform stubs (Codespaces or Gitpod)
 
 **Symlink targets** (created by `setup-common.sh`):
 - `~/.gitconfig` ← `config/git/.gitconfig`
@@ -36,7 +36,7 @@ This detects the OS/environment, symlinks config files to `$HOME`, and installs 
 - `npm.sh` — npm completions
 - `vanta.sh` — Vanta monorepo workspace helpers
 
-**`config/brew/Brewfile`** — Homebrew packages, conditional on platform (Codespaces gets minimal set, macOS gets full casks)
+**`config/brew/Brewfile`** — Homebrew packages, conditional on platform (cloud environments get minimal set, macOS gets full casks)
 
 **`bin/vanta-mongodb`** — MongoDB connection script using Tailscale + aws-vault, supports multiple environments
 
@@ -44,5 +44,5 @@ This detects the OS/environment, symlinks config files to `$HOME`, and installs 
 
 - Scripts use `set -e` and colored emoji output (`✅`, `⏳`, `❌`, `⚠️`, `🚀`)
 - Symlink creation is idempotent: checks existing links, removes incorrect ones
-- Platform detection via `$OSTYPE` and `$CODESPACES` env var
+- Platform detection via `$OSTYPE` and cloud env vars (`$CODESPACES`, `$GITPOD_WORKSPACE_ID`)
 - Component installers live in `scripts/install/` (brew, volta-and-node, zsh)
