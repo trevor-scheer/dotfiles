@@ -4,7 +4,7 @@ set -e
 
 
 DOTFILES_DIR="$HOME/dotfiles"
-ORIGINAL_DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+ORIGINAL_DOTFILES_DIR="$( cd "$( dirname "${0}" )" &> /dev/null && pwd )"
 if [ ! -e "$HOME/dotfiles" ]; then
     ln -s "$ORIGINAL_DOTFILES_DIR" "$DOTFILES_DIR"
 fi
