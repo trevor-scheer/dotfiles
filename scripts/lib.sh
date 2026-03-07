@@ -45,9 +45,9 @@ create_symlink() {
     return 0
   fi
 
-  # If file/symlink exists but is wrong, remove it
+  # If file/symlink/directory exists but is wrong, remove it
   if [ -e "$link_path" ] || [ -L "$link_path" ]; then
-    rm -f "$link_path"
+    rm -rf "$link_path"
   fi
 
   # Create symlink
