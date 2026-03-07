@@ -39,5 +39,3 @@ ship-it() {
 
   echo "✅ Done!"
 }
-
-echo "✅ Git utilities loaded."

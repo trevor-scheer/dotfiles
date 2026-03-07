@@ -32,5 +32,3 @@ elif type compctl &>/dev/null; then
   }
   compctl -K _npm_completion npm
 fi
-
-echo "✅ NPM utilities loaded."
