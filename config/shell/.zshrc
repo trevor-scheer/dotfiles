@@ -3,6 +3,12 @@ UTILITIES_DIR="$DOTFILES_DIR/config/shell/utilities"
 
 bindkey '^R' history-incremental-search-backward
 
+# Common shell options
+setopt AUTO_CD            # cd by typing directory name
+setopt HIST_IGNORE_DUPS   # no duplicate history entries
+setopt SHARE_HISTORY      # share history across sessions
+setopt APPEND_HISTORY     # append, don't overwrite
+
 # Alias, etc.
 source $UTILITIES_DIR/general.sh
 source $UTILITIES_DIR/docker.sh
