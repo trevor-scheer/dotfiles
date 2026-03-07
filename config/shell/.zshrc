@@ -4,7 +4,6 @@ UTILITIES_DIR="$DOTFILES_DIR/config/shell/utilities"
 bindkey '^R' history-incremental-search-backward
 
 # Alias, etc.
-echo "⏳ Loading shell utilities..."
 source $UTILITIES_DIR/docker.sh
 source $UTILITIES_DIR/git.sh
 source $UTILITIES_DIR/npm.sh
@@ -30,5 +29,4 @@ zstyle ':vcs_info:git:*' formats '%b '
 setopt PROMPT_SUBST
 PROMPT='%F{green}%*%f %F{blue}%~%f %F{red}${vcs_info_msg_0_}%f$ '
 
-echo "✅ zshrc loaded."
 
