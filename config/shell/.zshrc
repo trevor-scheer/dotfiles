@@ -1,4 +1,3 @@
-export DOTFILES_DIR="$HOME/dotfiles"
 UTILITIES_DIR="$DOTFILES_DIR/config/shell/utilities"
 
 bindkey '^R' history-incremental-search-backward
@@ -9,15 +8,6 @@ source $UTILITIES_DIR/docker.sh
 source $UTILITIES_DIR/git.sh
 source $UTILITIES_DIR/npm.sh
 source $UTILITIES_DIR/dotfiles-update.sh
-
-export HOMEBREW_BUNDLE_FILE="$DOTFILES_DIR/config/brew/Brewfile"
-# Add Homebrew to PATH if installed
-# Add Homebrew to PATH (linux and macOS)
-if [ -d /opt/homebrew ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-elif [ -d /home/linuxbrew/.linuxbrew ]; then
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fi
 
 # Don't think this does anything
 # Add custom scripts to PATH
