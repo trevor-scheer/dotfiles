@@ -31,9 +31,12 @@ function _dotfiles_check_updates() {
       echo -n "Pull updates? [y/N] "
       read -r response
       if [[ "$response" =~ ^[Yy]$ ]]; then
-        git -C "$dotfiles_dir" pull --ff-only && \
-          echo "\033[32mDotfiles updated. Restart your shell to pick up changes.\033[0m" || \
+        if git -C "$dotfiles_dir" pull --ff-only; then
+          echo "\033[32mDotfiles updated. Running install script...\033[0m"
+          "$dotfiles_dir/install.sh"
+        else
           echo "\033[31mFailed to pull updates. You may need to resolve conflicts manually.\033[0m"
+        fi
       fi
     fi
   fi
