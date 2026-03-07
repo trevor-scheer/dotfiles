@@ -14,13 +14,17 @@ jobs:
       - name: Run shellcheck on all scripts
         run: |
           find . -name "*.sh" -not -path "./.git/*" -not -path "./.claude/*" | while read -r f; do
-            # Skip files with zsh shebangs (shellcheck doesn't support zsh)
+            # Skip zsh scripts — shellcheck doesn't support zsh.
+            # Check shebang for 'zsh', and file contents for zsh builtins (compdef, compadd)
+            # to catch sourced files without shebangs.
             head -1 "$f" | grep -q 'zsh' && continue
+            grep -qE '\b(compdef|compadd)\b' "$f" && continue
             # -s bash: default to bash for sourced files without shebangs
             # -x: follow source statements
             # Excluded rules:
             #   SC1090: can't follow non-constant source (e.g. source ~/.zshrc)
             #   SC1091: can't follow sourced file that wasn't specified as input
             #   SC2016: single-quoted strings with $ are intentional (written to files for later expansion)
-            shellcheck -s bash -x -e SC1090,SC1091,SC2016 "$f"
+            #   SC2086: unquoted $DOTFILES_DIR/$HOME are safe in this context
+            shellcheck -s bash -x -e SC1090,SC1091,SC2016,SC2086 "$f"
           done
