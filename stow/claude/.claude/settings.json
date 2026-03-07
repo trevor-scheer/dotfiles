@@ -74,6 +74,7 @@
       "Bash(sd:*)",
       "Bash(scc:*)",
       "Bash(shellcheck:*)",
+      "Bash(stow:*)",
       "Bash(yq:*)",
       "mcp__lsp*",
       "WebFetch",

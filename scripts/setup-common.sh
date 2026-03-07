@@ -7,13 +7,6 @@ set -e
 
 source "$DOTFILES_DIR/scripts/lib.sh"
 
-log_info "Setting up symlinks for configuration files..."
-create_symlink "$DOTFILES_DIR/config/git/.gitconfig" "$HOME/.gitconfig"
-create_symlink "$DOTFILES_DIR/config/shell/.zshrc" "$HOME/.zshrc"
-create_symlink "$DOTFILES_DIR/config/shell/.zprofile" "$HOME/.zprofile"
-create_symlink "$DOTFILES_DIR/config/ghostty/config" "$HOME/.config/ghostty/config"
-source "$DOTFILES_DIR/config/claude/init.sh"
-
 # Main setup function
 log_info "Setting up shell and common cross-platform dependencies..."
 
@@ -33,6 +26,12 @@ brew upgrade
 brew bundle
 
 log_success "Homebrew packages installed successfully."
+
+log_info "Creating symlinks with GNU Stow..."
+stow -d "$DOTFILES_DIR/stow" -t "$HOME" git shell ghostty
+log_success "Symlinks created successfully."
+
+source "$DOTFILES_DIR/config/claude/init.sh"
 
 # Source shell configs so new tools are available in this session
 source "$HOME/.zprofile"

@@ -17,15 +17,15 @@ This detects the OS/environment, symlinks config files to `$HOME`, and installs 
 ## Architecture
 
 **`install.sh`** is the entry point. It sources platform-specific scripts from `scripts/`:
-- `setup-common.sh` — always runs: creates symlinks, installs Zsh/Volta/Homebrew, runs `brew bundle`
+- `setup-common.sh` — always runs: installs Zsh/Volta/Homebrew, runs `brew bundle`, uses GNU Stow for symlinks
 - `setup-macos.sh` — installs Xcode CLI tools
 - `setup-linux.sh` / `setup-codespaces.sh` — minimal platform stubs (Codespaces or Gitpod)
 
-**Symlink targets** (created by `setup-common.sh`):
-- `~/.gitconfig` ← `config/git/.gitconfig`
-- `~/.zshrc` ← `config/shell/.zshrc`
-- `~/.zprofile` ← `config/shell/.zprofile`
-- `~/.config/ghostty/config` ← `config/ghostty/config`
+**Symlink targets** (managed by GNU Stow, packages in `stow/`):
+- `stow/git/` → `~/.gitconfig`
+- `stow/shell/` → `~/.zshrc`, `~/.zprofile`
+- `stow/ghostty/` → `~/.config/ghostty/config`
+- `stow/claude/` → `~/.claude/settings.json`, `~/.claude/CLAUDE.md`, `~/.claude/skills/`
 
 **Shell config loading order**: `.zprofile` (env vars, Volta/PATH) → `.zshrc` (prompt, sources all files in `config/shell/utilities/`)
 
@@ -42,7 +42,7 @@ This detects the OS/environment, symlinks config files to `$HOME`, and installs 
 
 ## Claude Settings
 
-`config/claude/settings.json` contains shared permission defaults symlinked into `~/.claude/settings.json`.
+`stow/claude/.claude/settings.json` contains shared permission defaults symlinked into `~/.claude/settings.json` via GNU Stow.
 
 **Permissions philosophy:** Very permissive defaults. Claude should freely use all file tools, git/gh CLI, LSP tools, shell utilities, and build toolchains without prompting. Only destructive/irreversible commands (`rm`, `kill`) should require a prompt.
 
@@ -57,9 +57,9 @@ This detects the OS/environment, symlinks config files to `$HOME`, and installs 
 7. Skills
 
 **Other claude config:**
-- `config/claude/CLAUDE.md` — Shared global preferences symlinked to `~/.claude/CLAUDE.md` (agent tool preferences, etc.)
+- `stow/claude/.claude/CLAUDE.md` — Shared global preferences symlinked to `~/.claude/CLAUDE.md` (agent tool preferences, etc.)
 - `config/claude/claude.json` — Onboarding defaults (skip wizard, etc.)
-- `config/claude/skills/` — Shared skill definitions (create-pr, review-pr, bug-fix-workflow)
+- `stow/claude/.claude/skills/` — Shared skill definitions (create-pr, review-pr, bug-fix-workflow)
 
 ## Self-Improvement
 
@@ -74,6 +74,6 @@ This repo should get better over time through Claude's usage. Follow these defau
 ## Conventions
 
 - Scripts use `set -e` and colored emoji output
-- Symlink creation is idempotent: checks existing links, removes incorrect ones
+- Symlinks managed by GNU Stow (`stow/` packages mirror `$HOME` structure)
 - Platform detection via `$OSTYPE` and cloud env vars (`$CODESPACES`, `$GITPOD_WORKSPACE_ID`)
 - Component installers live in `scripts/install/` (brew, volta-and-node, zsh)
