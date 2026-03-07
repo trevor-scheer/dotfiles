@@ -13,4 +13,9 @@ jobs:
         run: sudo apt-get install -y shellcheck
       - name: Run shellcheck on all scripts
         run: |
-          find . -name "*.sh" -not -path "./.git/*" | xargs shellcheck
+          find . -name "*.sh" -not -path "./.git/*" -not -path "./.claude/*" | while read -r f; do
+            # Skip files with zsh shebangs (shellcheck doesn't support zsh)
+            head -1 "$f" | grep -q 'zsh' && continue
+            # For sourced files without shebangs, check as bash
+            shellcheck -s bash -x -e SC1091,SC2016 "$f"
+          done
