@@ -14,9 +14,6 @@ create_symlink "$DOTFILES_DIR/config/shell/.zprofile" "$HOME/.zprofile"
 create_symlink "$DOTFILES_DIR/config/ghostty/config" "$HOME/.config/ghostty/config"
 source "$DOTFILES_DIR/config/claude/init.sh"
 
-source "$HOME/.zshrc"
-source "$HOME/.zprofile"
-
 # Main setup function
 log_info "Setting up shell and common cross-platform dependencies..."
 
@@ -36,5 +33,9 @@ brew upgrade
 brew bundle
 
 log_success "Homebrew packages installed successfully."
+
+# Source shell configs so new tools are available in this session
+source "$HOME/.zprofile"
+source "$HOME/.zshrc"
 
 log_success "Common setup completed successfully."
