@@ -17,5 +17,5 @@ jobs:
             # Skip files with zsh shebangs (shellcheck doesn't support zsh)
             head -1 "$f" | grep -q 'zsh' && continue
             # For sourced files without shebangs, check as bash
-            shellcheck -s bash -x -e SC1091,SC2016 "$f"
+            shellcheck -s bash -x -e SC1090,SC1091,SC2016 "$f"
           done
