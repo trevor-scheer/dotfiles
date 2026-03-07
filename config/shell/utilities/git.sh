@@ -18,7 +18,7 @@ fixup() {
     # Create fixup commit targeting previous commit
     git commit --fixup=HEAD
     # Perform autosquash rebase to squash into previous commit
-    git rebase --autosquash -i HEAD~2
+    GIT_SEQUENCE_EDITOR=: git rebase --autosquash -i HEAD~2
   else
     echo "No unstaged changes found."
   fi
