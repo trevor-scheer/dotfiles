@@ -1,13 +1,20 @@
 #!/bin/bash
 
+# macOS-specific setup
+
+set -e
+
+source "$DOTFILES_DIR/scripts/lib.sh"
+
 # Install Xcode command line tools
 if xcode-select -p &> /dev/null; then
-    echo "✅ Xcode Command Line Tools are already installed."
+    log_success "Xcode Command Line Tools are already installed."
 else
-    echo "⏳ Installing Xcode Command Line Tools..."
+    log_info "Installing Xcode Command Line Tools..."
     xcode-select --install || true
 fi
 
-# Additional macOS specific configurations can be added here
+# Apply macOS system defaults
+source "$DOTFILES_DIR/scripts/macos-defaults.sh"
 
-echo "✅ macOS setup complete."
+log_success "macOS setup complete."
