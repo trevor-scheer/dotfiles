@@ -25,6 +25,8 @@ This detects the OS/environment, symlinks config files to `$HOME`, and installs 
 - `stow/git/` → `~/.gitconfig`
 - `stow/shell/` → `~/.zshrc`, `~/.zprofile`
 - `stow/ghostty/` → `~/.config/ghostty/config`
+- `stow/tmux/` → `~/.config/tmux/tmux.conf`
+- `stow/nvim/` → `~/.config/nvim/init.lua`
 - `stow/claude/` → `~/.claude/settings.json`, `~/.claude/CLAUDE.md`, `~/.claude/skills/`
 
 **Shell config loading order**: `.zprofile` (env vars, Volta/PATH) → `.zshrc` (prompt, sources all files in `config/shell/utilities/`)
