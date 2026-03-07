@@ -1,4 +1,4 @@
-if ENV["CODESPACES"]
+if ENV["CODESPACES"] || ENV["GITPOD_WORKSPACE_ID"]
   cask "claude-code"
 elsif RUBY_PLATFORM =~ /darwin/
   brew "fzf"
