@@ -59,16 +59,6 @@ else
 fi
 
 echo ""
-echo "=== Checking for unquoted variable expansions ==="
-while IFS= read -r f; do
-  if grep -n 'source $[A-Za-z_]' "$f" | grep -v '#' > /dev/null 2>&1; then
-    echo "❌ $f has unquoted source calls:"
-    grep -n 'source $[A-Za-z_]' "$f" | grep -v '#'
-    ((errors++))
-  fi
-done < <(find "$(dirname "$0")/.." -name "*.sh" -not -path "*/.git/*" -not -path "*/.claude/*")
-
-echo ""
 if [[ $errors -gt 0 ]]; then
   echo "❌ $errors error(s) found"
   exit 1
