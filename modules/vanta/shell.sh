@@ -1,3 +1,6 @@
+MODULE_DIR="${0:a:h}"
+source "$MODULE_DIR/git.sh"
+
 alias jdsw="just dev-start-web"
 alias mdsw="jdsw"
 
@@ -23,4 +26,3 @@ alias logs="just dev-watch-logs"
 alias jpp="just post-pull"
 alias yww="yarnweb"
 
-export PATH="$DOTFILES_DIR/bin:$PATH"
