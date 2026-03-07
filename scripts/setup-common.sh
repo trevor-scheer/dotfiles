@@ -28,7 +28,7 @@ brew bundle
 log_success "Homebrew packages installed successfully."
 
 log_info "Creating symlinks with GNU Stow..."
-stow -d "$DOTFILES_DIR/stow" -t "$HOME" git shell ghostty tmux nvim
+safe_stow git shell ghostty tmux nvim
 log_success "Symlinks created successfully."
 
 source "$DOTFILES_DIR/config/claude/init.sh"

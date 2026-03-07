@@ -2,7 +2,7 @@
 
 # Initialize Claude Code configuration for new environments
 
-stow -d "$DOTFILES_DIR/stow" -t "$HOME" claude
+safe_stow claude
 
 # Seed ~/.claude.json to skip the onboarding wizard
 CLAUDE_JSON="$HOME/.claude.json"

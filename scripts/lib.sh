@@ -53,3 +53,30 @@ create_symlink() {
   # Create symlink
   ln -s "$target" "$link_path"
 }
+
+# ---------------------------------------------------------------------------
+# GNU Stow helper (idempotent)
+# ---------------------------------------------------------------------------
+
+# Remove existing files/symlinks/dirs that would conflict with Stow,
+# then stow the given packages.
+#   Usage: safe_stow pkg1 pkg2 ...
+safe_stow() {
+  for pkg in "$@"; do
+    local stow_dir="$DOTFILES_DIR/stow/$pkg"
+    if [ -d "$stow_dir" ]; then
+      (cd "$stow_dir" && find . -type f) | while read -r rel; do
+        rel="${rel#./}"
+        local target="$HOME/$rel"
+        [ -e "$target" ] || [ -L "$target" ] && rm -f "$target"
+      done
+      # Remove directory symlinks (e.g. skills/) that Stow wants to replace
+      (cd "$stow_dir" && find . -mindepth 1 -type d) | while read -r rel; do
+        rel="${rel#./}"
+        local target="$HOME/$rel"
+        [ -L "$target" ] && rm -f "$target"
+      done
+    fi
+  done
+  stow -d "$DOTFILES_DIR/stow" -t "$HOME" "$@"
+}
