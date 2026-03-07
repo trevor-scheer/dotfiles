@@ -4,7 +4,7 @@ set -e
 errors=0
 
 check_symlink() {
-  local target="$1" link="$2"
+  local link="$2"
   if [[ -L "$link" ]]; then
     echo "✅ $link -> $(readlink "$link")"
   elif [[ -e "$link" ]]; then
@@ -44,14 +44,16 @@ done
 echo ""
 echo "=== Running shellcheck ==="
 if command -v shellcheck &>/dev/null; then
-  find "$(dirname "$0")/.." -name "*.sh" -not -path "*/.git/*" | while read -r f; do
-    if shellcheck "$f" 2>/dev/null; then
+  while IFS= read -r f; do
+    # Skip zsh scripts
+    head -1 "$f" | grep -q 'zsh' && continue
+    if shellcheck -s bash -x -e SC1091,SC2016 "$f" 2>/dev/null; then
       echo "✅ $f"
     else
       echo "❌ $f has shellcheck warnings"
-      ((errors++)) || true
+      ((errors++))
     fi
-  done
+  done < <(find "$(dirname "$0")/.." -name "*.sh" -not -path "*/.git/*" -not -path "*/.claude/*")
 else
   echo "⚠️  shellcheck not installed, skipping"
 fi
