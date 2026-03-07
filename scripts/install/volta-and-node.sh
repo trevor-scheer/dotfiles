@@ -2,8 +2,8 @@
 if ! command -v volta &> /dev/null; then
   echo "⏳ Installing Volta..."
   curl https://get.volta.sh | bash
-  echo 'export VOLTA_HOME="$HOME/.volta"' >> $HOME/.zprofile
-  echo 'export PATH="$VOLTA_HOME/bin:$PATH"' >> $HOME/.zprofile
+  grep -q 'VOLTA_HOME' "$HOME/.zprofile" || echo 'export VOLTA_HOME="$HOME/.volta"' >> "$HOME/.zprofile"
+  grep -q 'VOLTA_HOME/bin' "$HOME/.zprofile" || echo 'export PATH="$VOLTA_HOME/bin:$PATH"' >> "$HOME/.zprofile"
   
   # Source the new environment to make volta available immediately
   export VOLTA_HOME="$HOME/.volta"
