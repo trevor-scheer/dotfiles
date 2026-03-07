@@ -60,6 +60,16 @@ This detects the OS/environment, symlinks config files to `$HOME`, and installs 
 - `config/claude/claude.json` — Onboarding defaults (skip wizard, etc.)
 - `config/claude/skills/` — Shared skill definitions (create-pr, review-pr, bug-fix-workflow)
 
+## Self-Improvement
+
+This repo should get better over time through Claude's usage. Follow these defaults:
+
+**Update CLAUDE.md** when you discover something useful that isn't documented — new patterns, gotchas, or architectural details that would help future sessions. Keep it concise and organized within existing sections.
+
+**Suggest repo improvements** when you notice them during normal work (e.g. missing aliases, redundant code, outdated configs). For small fixes, offer to handle them inline. For larger improvements, suggest opening a GitHub issue with `gh issue create` so they can be tackled later.
+
+**Keep settings.json in sync** — if you use a new tool or workflow that requires a permission, update `config/claude/settings.json` so future sessions don't need to prompt.
+
 ## Conventions
 
 - Scripts use `set -e` and colored emoji output
