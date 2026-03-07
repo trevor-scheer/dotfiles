@@ -4,9 +4,11 @@ UTILITIES_DIR="$DOTFILES_DIR/config/shell/utilities"
 bindkey '^R' history-incremental-search-backward
 
 # Alias, etc.
+source $UTILITIES_DIR/general.sh
 source $UTILITIES_DIR/docker.sh
 source $UTILITIES_DIR/git.sh
 source $UTILITIES_DIR/npm.sh
+source $UTILITIES_DIR/dotfiles-update.sh
 
 export HOMEBREW_BUNDLE_FILE="$DOTFILES_DIR/config/brew/Brewfile"
 # Add Homebrew to PATH if installed
