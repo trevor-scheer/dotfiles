@@ -40,9 +40,29 @@ This detects the OS/environment, symlinks config files to `$HOME`, and installs 
 
 **`bin/vanta-mongodb`** — MongoDB connection script using Tailscale + aws-vault, supports multiple environments
 
+## Claude Settings
+
+`config/claude/settings.json` contains shared permission defaults symlinked into `~/.claude/settings.json`.
+
+**Permissions philosophy:** Very permissive defaults. Claude should freely use all file tools, git/gh CLI, LSP tools, shell utilities, and build toolchains without prompting. Only destructive/irreversible commands (`rm`, `kill`) should require a prompt.
+
+**Keeping settings.json current:** When adding new tools or workflows, update `config/claude/settings.json`. The allow list uses prefix matching — prefer broad patterns (e.g. `Bash(git:*)`) over enumerating subcommands. Group entries by category:
+
+1. Core file tools (Read, Edit, Write, Glob, Grep)
+2. Git and GitHub CLI
+3. Shell utilities (ls, grep, jq, curl, etc.)
+4. Build tools and language toolchains (make, cargo, npm, go, python, etc.)
+5. MCP/LSP tools (`mcp__lsp*`)
+6. Web tools (WebFetch, WebSearch)
+7. Skills
+
+**Other claude config:**
+- `config/claude/claude.json` — Onboarding defaults (skip wizard, etc.)
+- `config/claude/skills/` — Shared skill definitions (create-pr, review-pr, bug-fix-workflow)
+
 ## Conventions
 
-- Scripts use `set -e` and colored emoji output (`✅`, `⏳`, `❌`, `⚠️`, `🚀`)
+- Scripts use `set -e` and colored emoji output
 - Symlink creation is idempotent: checks existing links, removes incorrect ones
 - Platform detection via `$OSTYPE` and cloud env vars (`$CODESPACES`, `$GITPOD_WORKSPACE_ID`)
 - Component installers live in `scripts/install/` (brew, volta-and-node, zsh)
