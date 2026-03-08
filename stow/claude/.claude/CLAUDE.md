@@ -58,3 +58,7 @@ These tools are installed via Brewfile and are **preferred over their traditiona
 | **yq** | `yq` | manual YAML editing | Query/edit YAML, TOML/XML structurally (like jq for YAML). E.g. `yq '.services.web.ports' docker-compose.yml` |
 
 **Guidance:** Prefer `sg` over regex-based grep when searching for code patterns (function calls, imports, class definitions). Prefer `sd` over `sed` for substitutions. Prefer `difft` over `diff` for reviewing changes. Run `scc` early in a session to understand project scope. Run `shellcheck` on any generated shell scripts.
+
+## Pull Request Templates
+
+When creating or updating PRs, prefer the repo's own template (`.github/PULL_REQUEST_TEMPLATE.md`) if one exists. If not, use the default template at `~/.claude/skills/pr/PULL_REQUEST_TEMPLATE.md`. Always create PRs as drafts unless explicitly told otherwise.

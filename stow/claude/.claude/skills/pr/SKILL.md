@@ -1,14 +1,14 @@
 ---
-name: create-pr
-description: Create pull requests following best practices. Use when opening a PR, preparing changes for review, or running gh pr create.
+name: pr
+description: Create or update pull requests following best practices. Use when opening a PR, updating an existing PR, preparing changes for review, or running gh pr create.
 user-invocable: true
 ---
 
-# Creating Pull Requests
+# Pull Requests
 
-Follow these standards when creating PRs.
+Follow these standards when creating or updating PRs.
 
-## Before Creating the PR
+## Before Creating/Updating
 
 ### 1. Verify All Checks Pass
 
@@ -53,23 +53,12 @@ git log main..HEAD --oneline
 
 ## PR Description Structure
 
-Use this template:
+### Template priority
 
-```markdown
-## Summary
+1. **Repo template** — check for `.github/PULL_REQUEST_TEMPLATE.md` (or `.github/PULL_REQUEST_TEMPLATE/` directory) in the current repo. If present, use it.
+2. **Default template** — if no repo template exists, use the default template at `~/.claude/skills/pr/PULL_REQUEST_TEMPLATE.md`.
 
-<1-3 bullet points explaining what changed and why>
-
-## Changes
-
-- <Specific change 1>
-- <Specific change 2>
-- <New/updated tests>
-
-## Test Plan
-
-<Steps a reviewer can follow to verify the changes work>
-```
+Always populate the template sections based on the actual changes — never leave placeholder text.
 
 ## What NOT to Include
 
@@ -102,14 +91,16 @@ This section is ONLY for manual verification steps reviewers can follow:
 - Ran eslint with no warnings
 ```
 
-## Creating the PR
+## Creating a PR
+
+**Always create PRs as drafts by default.** Only create a ready-for-review PR if the user explicitly asks.
 
 ```bash
 # Push your branch first
 git push -u origin your-branch-name
 
-# Create the PR
-gh pr create \
+# Create the PR (draft by default)
+gh pr create --draft \
   --title "feat: your feature description" \
   --body "$(cat <<'EOF'
 ## Summary
@@ -120,7 +111,6 @@ gh pr create \
 
 - Implemented X in `src/components/`
 - Added tests for edge cases
-- Updated documentation
 
 ## Test Plan
 
@@ -130,7 +120,24 @@ EOF
 )"
 ```
 
-## After Creating the PR
+## Updating a PR
+
+When the user asks to update an existing PR, use `gh pr edit` to modify the title and/or body. Push any new commits first.
+
+```bash
+# Push new commits
+git push
+
+# Update the PR title and/or body
+gh pr edit --title "feat: updated title" --body "$(cat <<'EOF'
+...updated body...
+EOF
+)"
+```
+
+If only the description needs updating, omit `--title`. If only the title needs updating, omit `--body`.
+
+## After Creating/Updating
 
 1. Verify the PR looks correct on GitHub
 2. Check that CI starts running
@@ -142,6 +149,7 @@ EOF
 - [ ] All tests pass locally
 - [ ] Linting/formatting is clean
 - [ ] Commits follow conventional format
+- [ ] PR is created as draft (unless explicitly told otherwise)
 - [ ] PR title is descriptive (no emoji)
 - [ ] Summary explains what and why
 - [ ] Changes section lists specifics

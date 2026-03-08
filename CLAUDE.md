@@ -61,7 +61,8 @@ This detects the OS/environment, symlinks config files to `$HOME`, and installs 
 **Other claude config:**
 - `stow/claude/.claude/CLAUDE.md` — Shared global preferences symlinked to `~/.claude/CLAUDE.md` (agent tool preferences, etc.)
 - `config/claude/claude.json` — Onboarding defaults (skip wizard, etc.)
-- `stow/claude/.claude/skills/` — Shared skill definitions (create-pr, review-pr, bug-fix-workflow)
+- `stow/claude/.claude/skills/` — Shared skill definitions (pr, review-pr, bug-fix-workflow)
+- `stow/claude/.claude/skills/pr/PULL_REQUEST_TEMPLATE.md` — Default PR template used when a repo has no `.github/PULL_REQUEST_TEMPLATE.md`
 
 ## Self-Improvement
 
