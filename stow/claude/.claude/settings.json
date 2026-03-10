@@ -1,8 +1,4 @@
 {
-  "preferences": {
-    "enableCommitSignOff": false,
-    "enableCommitAttribution": false
-  },
   "permissions": {
     "allow": [
       "Read",
@@ -85,5 +81,18 @@
       "Skill(simplify)"
     ],
     "defaultMode": "acceptEdits"
+  },
+  "enabledPlugins": {},
+  "extraKnownMarketplaces": {
+    "graphql-analyzer": {
+      "source": {
+        "source": "github",
+        "repo": "trevor-scheer/graphql-analyzer"
+      }
+    }
+  },
+  "preferences": {
+    "enableCommitSignOff": false,
+    "enableCommitAttribution": false
   }
 }
