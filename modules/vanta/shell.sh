@@ -1,6 +1,3 @@
-MODULE_DIR="${0:a:h}"
-source "$MODULE_DIR/git.sh"
-
 alias jdsw="just dev-start-web"
 alias mdsw="jdsw"
 
