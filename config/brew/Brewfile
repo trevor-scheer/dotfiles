@@ -1,5 +1,4 @@
-if ENV["CODESPACES"] || ENV["GITPOD_WORKSPACE_ID"]
-  cask "claude-code"
+if ENV["IS_ON_ONA"] || ENV["CODESPACES"]
   brew "stow"
 
   # Agent-oriented tools (context-efficient for AI coding agents)

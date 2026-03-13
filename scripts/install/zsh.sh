@@ -1,5 +1,5 @@
 # Only setup zsh on Linux/Codespaces (macOS already uses zsh by default)
-if [[ "$OSTYPE" == "linux-gnu"* ]] || [ -n "$CODESPACES" ] || [ -n "$GITPOD_WORKSPACE_ID" ]; then
+if [[ "$OSTYPE" == "linux-gnu"* ]] || [ -n "$IS_ON_ONA" ] || [ -n "$CODESPACES" ]; then
   echo "⏳ Setting up zsh..."
   
   # Install zsh using system package manager (skip if already installed)

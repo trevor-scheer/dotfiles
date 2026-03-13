@@ -16,7 +16,7 @@ log_warn()    { echo "⚠️  $1"; }
 # Environment detection
 # ---------------------------------------------------------------------------
 
-is_cloud_env() { [[ -n "${CODESPACES:-}" ]] || [[ -n "${GITPOD_WORKSPACE_ID:-}" ]]; }
+is_cloud_env() { [[ -n "${IS_ON_ONA:-}" ]] || [[ -n "${CODESPACES:-}" ]]; }
 is_macos()     { [[ "$OSTYPE" == darwin* ]]; }
 is_linux()     { [[ "$OSTYPE" == linux* ]]; }
 

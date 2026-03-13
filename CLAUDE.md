@@ -78,5 +78,5 @@ This repo should get better over time through Claude's usage. Follow these defau
 
 - Scripts use `set -e` and colored emoji output
 - Symlinks managed by GNU Stow (`stow/` packages mirror `$HOME` structure)
-- Platform detection via `$OSTYPE` and cloud env vars (`$CODESPACES`, `$GITPOD_WORKSPACE_ID`)
+- Platform detection via `$OSTYPE` and cloud env vars (`$IS_ON_ONA`, `$CODESPACES`)
 - Component installers live in `scripts/install/` (brew, volta-and-node, zsh)
