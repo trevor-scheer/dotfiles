@@ -23,9 +23,9 @@ export HOMEBREW_BUNDLE_FILE="$DOTFILES_DIR/config/brew/Brewfile"
 is_cloud_env && export HOMEBREW_BUNDLE_IS_CLOUD_ENV=1 || true
 
 log_info "Installing Homebrew packages..."
-brew update
-brew upgrade
-brew bundle
+brew update --quiet
+brew upgrade --quiet
+brew bundle --quiet
 
 log_success "Homebrew packages installed successfully."
 
