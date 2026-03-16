@@ -18,6 +18,7 @@ source "$DOTFILES_DIR/scripts/setup-common.sh"
 if is_cloud_env; then
     log_info "Setting up cloud environment specifics..."
     source "$DOTFILES_DIR/scripts/setup-codespaces.sh"
+    log_success "Dotfiles setup completed successfully. Reload your shell: exec zsh"
     exit 0
 fi
 
@@ -32,4 +33,4 @@ else
     exit 1
 fi
 
-log_success "Dotfiles setup completed successfully."
+log_success "Dotfiles setup completed successfully. Reload your shell: exec zsh"
