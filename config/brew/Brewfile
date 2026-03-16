@@ -1,4 +1,4 @@
-if ENV["IS_ON_ONA"] || ENV["CODESPACES"]
+if ENV["HOMEBREW_BUNDLE_IS_CLOUD_ENV"]
   brew "stow"
 
   # Agent-oriented tools (context-efficient for AI coding agents)

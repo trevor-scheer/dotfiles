@@ -19,6 +19,8 @@ source "$DOTFILES_DIR/scripts/install/rustup.sh"
 source "$DOTFILES_DIR/scripts/install/brew.sh"
 
 export HOMEBREW_BUNDLE_FILE="$DOTFILES_DIR/config/brew/Brewfile"
+# Homebrew only exposes HOMEBREW_* env vars to Brewfile evaluation
+is_cloud_env && export HOMEBREW_BUNDLE_IS_CLOUD_ENV=1 || true
 
 log_info "Installing Homebrew packages..."
 brew update

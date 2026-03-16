@@ -94,5 +94,6 @@
   "preferences": {
     "enableCommitSignOff": false,
     "enableCommitAttribution": false
-  }
+  },
+  "skipDangerousModePermissionPrompt": true
 }
