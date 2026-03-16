@@ -8,7 +8,7 @@ _dotfiles_log() {
 _dotfiles_log "01" ".zprofile: start (DOTFILES_DIR=$DOTFILES_DIR)"
 
 # Cargo (Rust) environment
-#. "$HOME/.cargo/env"
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 export EDITOR="vim"
