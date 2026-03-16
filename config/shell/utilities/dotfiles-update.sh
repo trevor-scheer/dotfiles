@@ -17,7 +17,7 @@ function _dotfiles_check_updates() {
   if [[ "$response" =~ ^[Yy]$ ]]; then
     if git -C "$dotfiles_dir" pull --ff-only; then
       printf '\033[32mDotfiles updated. Running install script...\033[0m\n'
-      "$dotfiles_dir/install.sh"
+      "$dotfiles_dir/install.sh" && exec zsh
     else
       printf '\033[31mFailed to pull updates. You may need to resolve conflicts manually.\033[0m\n'
     fi
