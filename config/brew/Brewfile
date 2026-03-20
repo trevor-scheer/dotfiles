@@ -1,34 +1,28 @@
-if ENV["HOMEBREW_BUNDLE_IS_CLOUD_ENV"]
-  brew "stow"
+brew "stow"
+brew "fzf"
+brew "gh"
+brew "jq"
 
-  # Agent-oriented tools (context-efficient for AI coding agents)
-  brew "ast-grep"
-  brew "difftastic"
-  brew "sd"
-  brew "scc"
-  brew "shellcheck"
-  brew "yq"
-elsif RUBY_PLATFORM =~ /darwin/
-  brew "fzf"
-  brew "gh"
-  brew "jq"
-  brew "lazydocker"
-  brew "lazygit"
-  brew "neovim"
-  brew "podman"
-  brew "python@3.11"
-  brew "stow"
-  brew "tmux"
-  brew "tree"
-  brew "zoxide"
+# Agent-oriented tools (context-efficient for AI coding agents)
+brew "ast-grep"
+brew "difftastic"
+brew "sd"
+brew "scc"
+brew "shellcheck"
+brew "yq"
 
-  # Agent-oriented tools (context-efficient for AI coding agents)
-  brew "ast-grep"
-  brew "difftastic"
-  brew "sd"
-  brew "scc"
-  brew "shellcheck"
-  brew "yq"
+brew "tmux"
+brew "tree"
+brew "zoxide"
+
+brew "lazydocker"
+brew "lazygit"
+brew "neovim"
+brew "podman"
+brew "python@3.11"
+
+if RUBY_PLATFORM =~ /darwin/
+
   # Brew volta doesn't work well...it's installed in the install.sh script instead
   # brew "volta"
   
