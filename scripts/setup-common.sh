@@ -32,7 +32,7 @@ log_success "Homebrew packages installed successfully."
 command -v stow &>/dev/null || brew install stow
 
 log_info "Creating symlinks with GNU Stow..."
-safe_stow git shell ghostty tmux nvim
+safe_stow git shell ghostty tmux nvim claude
 log_success "Symlinks created successfully."
 
 source "$DOTFILES_DIR/config/claude/init.sh"

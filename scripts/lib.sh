@@ -65,16 +65,18 @@ safe_stow() {
   for pkg in "$@"; do
     local stow_dir="$DOTFILES_DIR/stow/$pkg"
     if [ -d "$stow_dir" ]; then
-      (cd "$stow_dir" && find . -type f) | while read -r rel; do
-        rel="${rel#./}"
-        local target="$HOME/$rel"
-        [ -e "$target" ] || [ -L "$target" ] && rm -f "$target"
-      done
-      # Remove directory symlinks (e.g. skills/) that Stow wants to replace
+      # Remove directory symlinks that Stow created via folding (e.g. ~/.config/nvim -> stow/nvim/.config/nvim).
+      # Must happen first so individual file removal below doesn't follow the dir symlink into the repo.
       (cd "$stow_dir" && find . -mindepth 1 -type d) | while read -r rel; do
         rel="${rel#./}"
         local target="$HOME/$rel"
         [ -L "$target" ] && rm -f "$target"
+      done
+      # Remove individual file symlinks/conflicts (only if not resolved through a dir symlink above)
+      (cd "$stow_dir" && find . -type f) | while read -r rel; do
+        rel="${rel#./}"
+        local target="$HOME/$rel"
+        [ -e "$target" ] || [ -L "$target" ] && rm -f "$target"
       done
     fi
   done
