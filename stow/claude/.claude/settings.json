@@ -82,18 +82,27 @@
     ],
     "defaultMode": "acceptEdits"
   },
-  "enabledPlugins": {},
+  "enabledPlugins": {
+    "superpowers@superpowers-marketplace": true
+  },
   "extraKnownMarketplaces": {
     "graphql-analyzer": {
       "source": {
         "source": "github",
         "repo": "trevor-scheer/graphql-analyzer"
       }
+    },
+    "superpowers-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers-marketplace"
+      }
     }
   },
+  "skipDangerousModePermissionPrompt": true,
   "preferences": {
     "enableCommitSignOff": false,
     "enableCommitAttribution": false
   },
-  "skipDangerousModePermissionPrompt": true
+  "voiceEnabled": true
 }
