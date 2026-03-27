@@ -83,6 +83,7 @@
     ],
     "defaultMode": "acceptEdits"
   },
+  "model": "opus[1m]",
   "enabledPlugins": {
     "superpowers@superpowers-marketplace": true
   },
