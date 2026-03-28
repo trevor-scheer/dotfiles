@@ -15,7 +15,7 @@ function _dotfiles_check_updates() {
   printf 'Pull updates? [y/N] '
   read -r response
   if [[ "$response" =~ ^[Yy]$ ]]; then
-    if git -C "$dotfiles_dir" pull --ff-only; then
+    if git -C "$dotfiles_dir" pull --no-rebase --ff-only; then
       printf '\033[32mDotfiles updated. Running install script...\033[0m\n'
       "$dotfiles_dir/install.sh" && exec zsh
     else
